@@ -85,12 +85,13 @@ def lanczos(A, dimension, v0, num_steps, tf_float=tf.float32, orth_tol=10e-08):
             wn =  tf.constant([0], dtype=tf_float, name="wn")
             alphas = tf.constant([], dtype=tf_float, name="list_alphas")
             betas = tf.constant([], dtype=tf_float, name="list_betas")
-            i_step = tf.constant(1, name="i_step")
+            i_step = tf.constant(0, name="i_step")
             num_steps = tf.constant(num_steps, name="num_steps")
             ortho_ok = tf.constant(True, dtype=tf.bool, name="ortho_ok")
             orth_tol = tf.constant([orth_tol], name="ortho_tolerance")
 
             v  =  v0/tf.linalg.norm(v0, 2, name="v")
+
 
         def cond(alpha, beta,  wn, v, vold, V, alphas, betas, ortho_ok, i_step):
             with tf.name_scope("while_cond") as scope:
@@ -106,10 +107,13 @@ def lanczos(A, dimension, v0, num_steps, tf_float=tf.float32, orth_tol=10e-08):
                 alpha, beta, wn, w, t = apply_lanczos_step(beta, wn, v, vold, V, A)
 
                 with tf.name_scope("ortho_condition", values=[beta, i_step]) as scope:
-                    break_condition = tf.less(
+                    break_condition = tf.logical_and(
+                        tf.less(
                             (wn*orth_tol)[0], (beta*tf.cast(i_step, dtype=tf.float32))[0],
                             name="break_condition"
-                        )
+                        ),
+                        tf.less_equal(i_step, num_steps)
+                    )
                     alpha, beta, wn, vold, v, V, alphas, betas, ortho_ok = tf.cond(
                         pred = break_condition,
                         true_fn = lambda:lanczos_ortho_ok(alpha, beta, w, wn, vold, v, V, alphas, betas),
