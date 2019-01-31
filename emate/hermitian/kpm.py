@@ -1,20 +1,23 @@
 import tensorflow as tf
 import numpy as np
 
+from emate.linalg import get_bounds, rescale_matrix
+from emate.utils.kernels import get_jackson_kernel
+from emate.utils.vec_factory import normal_vec_factory as random_vec_factory
+
 
 def get_moments(
-    H,
-    num_vecs,
-    num_moments,
-    alpha0,
-    alpha1,
-    drop_moments_history=False,
-    tf_float=tf.float32,
-    tf_complex=tf.complex64,
-    swap_memory=True,
-    name_scope=None
+        H,
+        num_vecs,
+        num_moments,
+        alpha0,
+        alpha1,
+        drop_moments_history=False,
+        tf_float=tf.float32,
+        tf_complex=tf.complex64,
+        swap_memory=True,
+        name_scope=None
 ):
-
     """
     Parameters:
         H: SparseTensor of rank 2
@@ -228,3 +231,84 @@ def apply_kernel(
             rho = tf.divide(smooth_moments, gk)/scale_fact_a
 
         return ek, rho
+
+
+def kpm(
+    H,
+    num_moments,
+    num_vecs,
+    extra_points,
+    num_steps=1,
+    precision=32,
+    lmin=None,
+    lmax=None,
+    epsilon=0.01,
+    device='/gpu:0',
+    swap_memory_while=False,
+    summary_file=None
+):
+
+    if precision == 32:
+        tf_float = tf.float32
+        tf_complex = tf.complex64
+        np_float = np.float32
+    elif precision == 64:
+        tf_float = tf.float64
+        tf_complex = tf.complex128
+        np_float = np.float64
+
+    drop_moments_history = num_steps == 1
+    H, scale_fact_a, scale_fact_b = rescale_matrix(H, lmin, lmax,)
+    dimension = H.shape[0]
+    coo = H.tocoo()
+    data = np.array(coo.data, dtype=np_float)
+    shape = np.array(coo.shape, dtype=np.int32)
+    indices = np.mat([coo.row, coo.col], dtype=np.float32).transpose()
+
+    tf.reset_default_graph()
+
+    with tf.device(device):
+
+            Htf = tf.SparseTensor(indices, data, shape)
+
+            alpha0, alpha1 = random_vec_factory(
+                Htf,
+                dimension=dimension,
+                num_vecs=num_vecs,
+                tf_float=tf_float,
+                tf_complex=tf_complex
+            )
+
+            moments, first_moment, second_moment, alpha1, alpha2 = get_moments(
+                Htf,
+                num_vecs,
+                num_moments,
+                alpha0,
+                alpha1,
+                drop_moments_history,
+                tf_float,
+                tf_complex,
+                swap_memory=True,
+
+            )
+            kernel = get_jackson_kernel(num_moments, tf_float)
+            ek, rho = apply_kernel(
+                moments,
+                kernel,
+                scale_fact_a,
+                scale_fact_b,
+                dimension,
+                num_moments,
+                num_vecs,
+                extra_points,
+                drop_moments_history,
+                tf_float
+            )
+
+    with tf.Session() as sess:
+        if summary_file is not None:
+            writer = tf.summary.FileWriter(summary_file, sess.graph)
+
+        ek, rho = sess.run([ek, rho])
+
+    return ek, rho
