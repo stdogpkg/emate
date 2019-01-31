@@ -44,7 +44,7 @@ def Lanczos_step(
         )
 
         beta = tf.reduce_sum(
-            tf.power(w, 2),
+            tf.math.pow(w, 2),
             axis=0,
             name="beta"
         )
