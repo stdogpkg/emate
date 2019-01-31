@@ -1,6 +1,6 @@
 import tensorflow as tf
 
-def Lanczos_step(
+def apply_lanczos_step(
     beta,
     wn,
     v,
@@ -53,11 +53,11 @@ def Lanczos_step(
 
 
 
-def Lanczos_ortho_fail(alpha, beta, w, wn, vold, v, V, alphas, betas):
+def lanczos_ortho_fail(alpha, beta, w, wn, vold, v, V, alphas, betas):
     with tf.name_scope("ortho_fail") as scope:
         return [alpha, beta, wn, vold, v, V,tf.concat([alphas, alpha], axis=0), betas,  False]
 
-def Lanczos_ortho_ok(alpha, beta, w, wn, vold, v, V, alphas, betas):
+def lanczos_ortho_ok(alpha, beta, w, wn, vold, v, V, alphas, betas):
     with tf.name_scope("ortho_ok") as scope:
         wn = wn+2.0*beta
         beta = tf.sqrt(beta)
@@ -76,7 +76,7 @@ def Lanczos_ortho_ok(alpha, beta, w, wn, vold, v, V, alphas, betas):
             tf.constant(True, dtype=tf.bool)
         ]
 
-def Lanczos(A, dimension, v0, num_steps, tf_float=tf.float32, orth_tol=10e-08):
+def lanczos(A, dimension, v0, num_steps, tf_float=tf.float32, orth_tol=10e-08):
     with tf.name_scope("Lanczos_Method") as scope:
 
         with tf.name_scope("init_vars") as scope:
@@ -103,7 +103,7 @@ def Lanczos(A, dimension, v0, num_steps, tf_float=tf.float32, orth_tol=10e-08):
         def body(alpha, beta, wn, v, vold, V, alphas, betas, ortho_ok, i_step):
             with tf.name_scope("while_body") as scope:
 
-                alpha, beta, wn, w, t = Lanczos_step(beta, wn, v, vold, V, A)
+                alpha, beta, wn, w, t = apply_lanczos_step(beta, wn, v, vold, V, A)
 
                 with tf.name_scope("ortho_condition", values=[beta, i_step]) as scope:
                     break_condition = tf.less(
@@ -112,8 +112,8 @@ def Lanczos(A, dimension, v0, num_steps, tf_float=tf.float32, orth_tol=10e-08):
                         )
                     alpha, beta, wn, vold, v, V, alphas, betas, ortho_ok = tf.cond(
                         pred = break_condition,
-                        true_fn = lambda:Lanczos_ortho_ok(alpha, beta, w, wn, vold, v, V, alphas, betas),
-                        false_fn = lambda: Lanczos_ortho_fail(alpha, beta, w, wn, vold, v, V, alphas, betas),
+                        true_fn = lambda:lanczos_ortho_ok(alpha, beta, w, wn, vold, v, V, alphas, betas),
+                        false_fn = lambda: lanczos_ortho_fail(alpha, beta, w, wn, vold, v, V, alphas, betas),
                         name="conditional"
                     )
 

@@ -3,7 +3,7 @@ import numpy as np
 
 from emate.linalg import get_bounds, rescale_matrix
 from emate.utils.kernels import get_jackson_kernel
-from emate.utils.vec_factory import normal_vec_factory as random_vec_factory
+from emate.utils.vector_factories import normal_vec_factory as random_vec_factory
 
 
 def get_moments(

@@ -51,3 +51,10 @@ def normal_vec_factory(
             1j*tf.cast(alpha1_sin, dtype=tf_complex)
         )
         return alpha0, alpha1
+
+def radamacher(shape, norm=True, tf_float=tf.float32):
+    with tf.name_scope("random_radamacher") as scope:
+        w = tf.sign(tf.random.normal(shape, dtype=tf_float), name="w")
+        if norm:
+            w = tf.divide(w, tf.norm(w), name="v0")
+        return w
