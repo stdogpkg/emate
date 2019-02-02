@@ -1,3 +1,15 @@
+"""
+Lanczos
+=======
+
+Available methods
+-----------------
+
+lanczos_step
+
+lanczos
+
+"""
 import tensorflow as tf
 
 
@@ -10,6 +22,23 @@ def lanczos_step(
     A,
     name_scope=None
 ):
+    """
+
+    Parameters
+    ----------
+
+        tf_float: (tensorflow float type)
+            valids values are tf.float32, tf.float64, or tf.float128
+        name_scope: (str) (default="get_jackson_kernel")
+            scope name for tensorflow
+
+    Return
+    ------
+
+    Note
+    ----
+
+    """
     with tf.name_scope(name_scope, "lanczos_step"):
 
         w = tf.subtract(
@@ -46,40 +75,55 @@ def lanczos_step(
     return alpha, beta, wn, w, t
 
 
-def lanczos_ortho_fail(alpha, beta, w, wn, vold, v, V, alphas, betas):
-    with tf.name_scope("ortho_fail"):
-        return [
-            alpha,
-            beta,
-            wn,
-            vold,
-            v,
-            V,
-            tf.concat([alphas, alpha], axis=0),
-            betas
-        ]
-
-
-def lanczos_ortho_ok(alpha, beta, w, wn, vold, v, V, alphas, betas):
-    with tf.name_scope("ortho_ok"):
-        wn = wn+2.0*beta
-        beta = tf.sqrt(beta)
-        vold = v
-        v = w/beta
-
-        return [
-            alpha,
-            beta,
-            wn,
-            vold,
-            v,
-            tf.concat([V, v], axis=1),
-            tf.concat([alphas, alpha], axis=0),
-            tf.concat([betas, beta], axis=0),
-        ]
-
 
 def lanczos(A, dimension, v0, num_steps, tf_float=tf.float32, orth_tol=1e-8):
+    """
+
+    Parameters
+    ----------
+
+        tf_float: (tensorflow float type)
+            valids values are tf.float32, tf.float64, or tf.float128
+        name_scope: (str) (default="get_jackson_kernel")
+            scope name for tensorflow
+
+    Return
+    ------
+
+    Note
+    ----
+
+    """
+    def lanczos_ortho_fail(alpha, beta, w, wn, vold, v, V, alphas, betas):
+        with tf.name_scope("ortho_fail"):
+            return [
+                alpha,
+                beta,
+                wn,
+                vold,
+                v,
+                V,
+                tf.concat([alphas, alpha], axis=0),
+                betas
+            ]
+
+    def lanczos_ortho_ok(alpha, beta, w, wn, vold, v, V, alphas, betas):
+        with tf.name_scope("ortho_ok"):
+            wn = wn+2.0*beta
+            beta = tf.sqrt(beta)
+            vold = v
+            v = w/beta
+
+            return [
+                alpha,
+                beta,
+                wn,
+                vold,
+                v,
+                tf.concat([V, v], axis=1),
+                tf.concat([alphas, alpha], axis=0),
+                tf.concat([betas, beta], axis=0),
+            ]
     with tf.name_scope("Lanczos_Method"):
 
         with tf.name_scope("init_vars"):

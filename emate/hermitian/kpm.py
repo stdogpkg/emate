@@ -1,3 +1,30 @@
+"""
+Kernel Polynomial Method
+========================
+
+The kernel polynomial method is an algorithm to obtain an approximation
+for the spectral density of a Hermitian matrix. This algorithm combines
+expansion in polynomials of Chebyshev with the stochastic trace in order
+to obtain such approximation.
+
+Applications
+------------
+
+    - Hamiltonian matrices associated with quantum mechanics
+    - Magnetic Laplacian associated with directed graphs
+    - etc
+
+Available functions
+-------------------
+
+kpm
+
+get_moments:
+
+apply_kernel
+
+"""
+
 import tensorflow as tf
 import numpy as np
 
@@ -19,7 +46,8 @@ def get_moments(
     name_scope=None
 ):
     """
-    Parameters:
+    Parameters
+    ----------
         H: SparseTensor of rank 2
         num_vecs: (uint) number of random vectors
         num_moments: (uint) number of cheby. moments
@@ -31,7 +59,8 @@ def get_moments(
         tf_complex: tensorflow complex dtyle
         swap_memory: (bool) swap memory CPU-GPU
 
-    Return:
+    Returns
+    -------
         moments: Tensor("while", shape=(?, num_moments), dtype=tf_complex)
             if drop_moments_history:
                 ? = 1
@@ -194,43 +223,60 @@ def apply_kernel(
     tf_float=tf.float32,
     name_scope=None
 ):
+    """
 
-        with tf.name_scope(name_scope, "apply_kernel") as scope:
+    Parameters
+    ----------
 
-            moments = tf.math.real(moments)
+        tf_float: (tensorflow float type)
+            valids values are tf.float32, tf.float64, or tf.float128
+        name_scope: (str) (default="get_jackson_kernel")
+            scope name for tensorflow
 
-            if drop_moments_history is False:
-                moments = tf.reduce_sum(moments, axis=0)
-                moments = tf.reshape(moments, (1, num_moments))
+    Return
+    ------
 
+    Note
+    ----
+
+    """
+
+    with tf.name_scope(name_scope, "apply_kernel"):
+
+        moments = tf.math.real(moments)
+
+        if drop_moments_history is False:
             moments = tf.reduce_sum(moments, axis=0)
+            moments = tf.reshape(moments, (1, num_moments))
 
-            moments = moments/num_vecs/dimension
-            moments = tf.reshape(moments, shape=(1, num_moments))
+        moments = tf.reduce_sum(moments, axis=0)
 
-            smooth_moments = tf.concat(
-                [
-                    moments*kernel,
-                    tf.zeros((1, extra_points),
-                             dtype=tf_float)
-                ],
-                axis=1
-            )
+        moments = moments/num_vecs/dimension
+        moments = tf.reshape(moments, shape=(1, num_moments))
 
-            num_points = num_moments+extra_points
+        smooth_moments = tf.concat(
+            [
+                moments*kernel,
+                tf.zeros((1, extra_points),
+                         dtype=tf_float)
+            ],
+            axis=1
+        )
 
-            smooth_moments = tf.reshape(smooth_moments, [num_points])
-            smooth_moments = tf.spectral.dct(smooth_moments, type=3)
+        num_points = num_moments+extra_points
 
-            points = tf.range(num_points, dtype=tf_float)
+        smooth_moments = tf.reshape(smooth_moments, [num_points])
+        smooth_moments = tf.spectral.dct(smooth_moments, type=3)
 
-            ek_rescaled = tf.cos(np.pi*(points+0.5)/(num_points))
-            gk = np.pi*tf.sqrt(1.-ek_rescaled**2)
+        points = tf.range(num_points, dtype=tf_float)
 
-            ek = ek_rescaled*scale_fact_a + scale_fact_b
-            rho = tf.divide(smooth_moments, gk)/scale_fact_a
+        ek_rescaled = tf.cos(np.pi*(points+0.5)/(num_points))
+        gk = np.pi*tf.sqrt(1.-ek_rescaled**2)
 
-        return ek, rho
+        ek = ek_rescaled*scale_fact_a + scale_fact_b
+        rho = tf.divide(smooth_moments, gk)/scale_fact_a
+
+    return ek, rho
 
 
 def kpm(
@@ -248,6 +294,23 @@ def kpm(
     summary_file=None
 ):
 
+    """
+
+    Parameters
+    ----------
+
+        tf_float: (tensorflow float type)
+            valids values are tf.float32, tf.float64, or tf.float128
+        name_scope: (str) (default="get_jackson_kernel")
+            scope name for tensorflow
+
+    Return
+    ------
+
+    Note
+    ----
+
+    """
     if precision == 32:
         tf_float = tf.float32
         tf_complex = tf.complex64

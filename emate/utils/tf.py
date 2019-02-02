@@ -1,22 +1,38 @@
+"""
+Utils TF
+================
+
+
+Available methods
+-----------------
+
+    - replace_by_indices
+        Given an input_matrix, replaces the values given a set of indices.
+
+"""
+
+
 import tensorflow as tf
 
 
 def replace_by_indices(input_matrix, values, indices, dimension,
                        tf_type=tf.float32, name_scope=None):
-
     """
-    Generates a set of Radamacher vectors
-    Args:
-        input_matrix: SparseTensor(shape=shape, dtype=tf_float)
-        values:
-        indices:
-        dimension:
-        tf_float: (tensorflow float type)(default=tf.float32)
-        name_scope: (str)(default="random_vec_factory")
+    Given an input_matrix, replaces the values given a set of indices.
+
+    Parameters
+    ----------
+        input_matrix: Tensor(shape=(dimension, dimension), dtype=tf_type)
+        values: Tensor(shape=(None,), dtype=tf_type)
+        indices: Tensor(shape=(None, 2), dtype=int64)
+        dimension: (int) or (tensorflow int constant)
+        tf_type: (tensorflow type)(default=tf.float32)
+        name_scope: (str)(default="replace_by_indices")
             scope name for tensorflow
 
-    Return:
-        vec: Tensor(shape=shape, dtype=tf_float)
+    Return
+    ------
+        output_matrix: Tensor(shape=(dimension, dimension), dtype=tf_type)
 
     """
     with tf.name_scope("replace_by_indices", name_scope):

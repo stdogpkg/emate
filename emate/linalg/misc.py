@@ -1,3 +1,16 @@
+"""
+Linear Algebra Tools - Misc
+===========================
+
+Available methods
+-----------------
+
+get_bounds
+
+rescale_matrix
+"""
+
+
 from scipy import sparse
 
 
@@ -20,10 +33,12 @@ def get_bounds(
     .. _sparse.linalg.eigsh: https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.linalg.eigsh.html
 
 
-    Args:
+    Parameters
+    ----------
         H: (scipy sparse matrix) A hermitian matrix in sparse format
 
-    Return:
+    Returns
+    -------
         lmin: (float) smallest eigenvalue
         lmax: (float) largest eigenvalue
 
@@ -71,16 +86,17 @@ def rescale_matrix(H, lmin, lmax, epsilon=0.01):
     Return a  rescaled H matrix, so that  the eigenvalues associated
 are in the range $[-1, 1]$.
 
-    Args:
+    Parameters
+    ----------
         H: (scipy sparse matrix) A hermitian matrix in sparse format
         lmin: (float)
         lmax: (float)
         epsilon: (float)
-    Return:
+    Returns
+    -------
         H: (scipy sparse matrix) with eigenvalues  $\in [-1, 1]$
         scale_fact_a: (float)
         scale_fact_b: (float)
-
     """
     if (lmin is None) or (lmax is None):
         lmin, lmax = get_bounds(H)

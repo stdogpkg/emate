@@ -1,3 +1,16 @@
+"""
+Vector Factories
+================
+
+Explicar o que e uma vector factory, onde e usado
+
+Available methods
+-----------------
+
+    - Complex Normal Gaussian (mostly used for kpm)
+    - Radamacher
+"""
+
 import tensorflow as tf
 import numpy as np
 
@@ -12,7 +25,8 @@ def normal_vec_factory(
 ):
     """
     Generates a set of complex random vectors
-    Args:
+    Parameters
+    ----------
         H: SparseTensor(shape=(dimension, dimension), dtype=tf_complex)
         dimension: (int) dimension matrix
         num_vecs: (int) number of random vectors
@@ -21,12 +35,13 @@ def normal_vec_factory(
         name_scope: (str)(default="random_vec_factory")
             scope name for tensorflow
 
-    Return:
+    Returns
+    ------
         alpha0: Tensor(shape=(dimension, num_vecs), dtype=tf_complex)
         alpha1: Tensor(shape=(dimension, num_vecs), dtype=tf_complex)
 
     """
-    with tf.name_scope(name_scope, "random_vec_factory") as scope:
+    with tf.name_scope(name_scope, "random_vec_factory"):
 
         random_phases = 2.*np.pi*tf.random.uniform(
             [dimension, num_vecs],
@@ -52,8 +67,25 @@ def normal_vec_factory(
         return alpha0, alpha1
 
 
-def radamacher(shape, norm=True, tf_float=tf.float32):
-    with tf.name_scope("random_radamacher"):
+def radamacher(shape, norm=True, tf_float=tf.float32, name_scope=None):
+    """
+    Generates a set of Radamacher vectors.
+
+    Parameters
+    ----------
+        shape: SparseTensor(shape=shape, dtype=tf_float)
+        norm: (bool)(default=True)
+            If True the Radamacher vector returned is normalized
+        tf_float: (tensorflow float type)(default=tf.float32)
+        name_scope: (str)(default="random_vec_factory")
+            scope name for tensorflow
+
+    Return
+    ------
+        vec: Tensor(shape=shape, dtype=tf_float)
+
+    """
+    with tf.name_scope("radamacher_factory", name_scope):
         vec = tf.sign(tf.random.normal(shape, dtype=tf_float))
         if norm:
             vec = tf.divide(vec, tf.norm(vec))

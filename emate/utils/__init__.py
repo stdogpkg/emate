@@ -1,1 +1,14 @@
-from emate.utils.misc import replace_by_indices
+"""
+Utils
+=====
+
+Available submodules
+---------------------
+
+kernels
+
+misc
+
+vector_factories
+"""
+from emate.utils.tf import replace_by_indices
