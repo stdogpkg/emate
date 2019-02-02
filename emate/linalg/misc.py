@@ -47,19 +47,19 @@ def get_bounds(
     )
     lmin = float(
         sparse.linalg.eigsh(
-                H,
-                k=1,
-                which="SA",
-                return_eigenvectors=False,
-                M=M,
-                sigma=sigma,
-                v0=v0,
-                ncv=ncv,
-                maxiter=maxiter,
-                tol=tol,
-                Minv=Minv,
-                OPinv=OPinv,
-                mode=mode
+            H,
+            k=1,
+            which="SA",
+            return_eigenvectors=False,
+            M=M,
+            sigma=sigma,
+            v0=v0,
+            ncv=ncv,
+            maxiter=maxiter,
+            tol=tol,
+            Minv=Minv,
+            OPinv=OPinv,
+            mode=mode
         )
     )
 

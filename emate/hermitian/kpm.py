@@ -1,22 +1,22 @@
 import tensorflow as tf
 import numpy as np
 
-from emate.linalg import get_bounds, rescale_matrix
+from emate.linalg import rescale_matrix
 from emate.utils.kernels import get_jackson_kernel
 from emate.utils.vector_factories import normal_vec_factory as random_vec_factory
 
 
 def get_moments(
-        H,
-        num_vecs,
-        num_moments,
-        alpha0,
-        alpha1,
-        drop_moments_history=False,
-        tf_float=tf.float32,
-        tf_complex=tf.complex64,
-        swap_memory=True,
-        name_scope=None
+    H,
+    num_vecs,
+    num_moments,
+    alpha0,
+    alpha1,
+    drop_moments_history=False,
+    tf_float=tf.float32,
+    tf_complex=tf.complex64,
+    swap_memory=True,
+    name_scope=None
 ):
     """
     Parameters:
@@ -182,17 +182,17 @@ def get_moments(
 
 
 def apply_kernel(
-        moments,
-        kernel,
-        scale_fact_a,
-        scale_fact_b,
-        dimension,
-        num_moments,
-        num_vecs,
-        extra_points=1,
-        drop_moments_history=True,
-        tf_float=tf.float32,
-        name_scope=None
+    moments,
+    kernel,
+    scale_fact_a,
+    scale_fact_b,
+    dimension,
+    num_moments,
+    num_vecs,
+    extra_points=1,
+    drop_moments_history=True,
+    tf_float=tf.float32,
+    name_scope=None
 ):
 
         with tf.name_scope(name_scope, "apply_kernel") as scope:

@@ -1,4 +1,3 @@
-
 import tensorflow as tf
 import numpy as np
 
@@ -52,9 +51,10 @@ def normal_vec_factory(
         )
         return alpha0, alpha1
 
+
 def radamacher(shape, norm=True, tf_float=tf.float32):
-    with tf.name_scope("random_radamacher") as scope:
-        w = tf.sign(tf.random.normal(shape, dtype=tf_float), name="w")
+    with tf.name_scope("random_radamacher"):
+        vec = tf.sign(tf.random.normal(shape, dtype=tf_float))
         if norm:
-            w = tf.divide(w, tf.norm(w), name="v0")
-        return w
+            vec = tf.divide(vec, tf.norm(vec))
+        return vec

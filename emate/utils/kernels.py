@@ -1,10 +1,12 @@
 import tensorflow as tf
 import numpy as np
 
+
 def get_jackson_kernel(
-        num_moments,
-        tf_float,
-        name_scope=None):
+    num_moments,
+    tf_float,
+    name_scope=None
+):
     """
     This function generates the Jackson kernel for a given  number of
     Chebyscev moments
