@@ -30,7 +30,7 @@ import numpy as np
 
 from emate.linalg import rescale_matrix
 from emate.utils.kernels import get_jackson_kernel
-from emate.utils.vector_factories import normal_vec_factory as random_vec_factory
+from emate.utils.vector_factories import normal_complex
 
 
 def get_moments(
@@ -288,6 +288,7 @@ def kpm(
     precision=32,
     lmin=None,
     lmax=None,
+    random_factory=normal_complex,
     epsilon=0.01,
     device='/gpu:0',
     swap_memory_while=False,
@@ -332,18 +333,26 @@ def kpm(
 
     with tf.device(device):
 
-            Htf = tf.SparseTensor(indices, data, shape)
+            H = tf.SparseTensor(indices, data, shape)
 
-            alpha0, alpha1 = random_vec_factory(
-                Htf,
-                dimension=dimension,
-                num_vecs=num_vecs,
+            alpha0_cos, alpha0_sin = random_factory(
+                shape=(dimension, num_vecs),
+                return_complex=False,
                 tf_float=tf_float,
-                tf_complex=tf_complex
+            )
+            alpha0 = tf.add(
+                tf.cast(alpha0_cos, dtype=tf_complex),
+                1j*tf.cast(alpha0_sin, dtype=tf_complex)
             )
 
+            alpha1_sin = tf.sparse_tensor_dense_matmul(H, alpha0_sin)
+            alpha1_cos = tf.sparse_tensor_dense_matmul(H, alpha0_cos)
+            alpha1 = tf.add(
+                tf.cast(alpha1_cos, dtype=tf_complex),
+                1j*tf.cast(alpha1_sin, dtype=tf_complex)
+            )
             moments, first_moment, second_moment, alpha1, alpha2 = get_moments(
-                Htf,
+                H,
                 num_vecs,
                 num_moments,
                 alpha0,
