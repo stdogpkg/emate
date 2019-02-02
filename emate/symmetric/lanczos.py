@@ -83,8 +83,7 @@ def trace_estimator(
                     indices = tf.concat([above_idx, below_idx], axis=0)
                     values = tf.concat([betas, betas], axis=0)
 
-                    T = replace_by_indices(T, values, indices,
-                        num_alphas, tf_float)
+                    T = replace_by_indices(T, values, indices, tf_float)
 
                 eigvals, eigvecs = tf.linalg.eigh(T)
                 thetas = trace_function(eigvals)
