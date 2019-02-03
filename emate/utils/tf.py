@@ -15,6 +15,85 @@ Available methods
 import tensorflow as tf
 
 
+def break_sparse_tensor(a):
+
+    imag_values = tf.math.imag(a.values)
+    real_values = tf.math.real(a.values)
+    imag = tf.SparseTensor(a.indices, imag_values, a.dense_shape)
+    real = tf.SparseTensor(a.indices, real_values, a.dense_shape)
+
+    return real, imag
+
+
+def sparse_tensor_dense_matmul_gpu(sp_a, b, force_gpu=True, adjoint_a=False,
+    adjoint_b=False):
+
+    sp_a_is_complex = sp_a.dtype.is_complex
+    b_is_complex = b.dtype.is_complex
+    ab_are_real = sp_a_is_complex is False and b_is_complex is False
+    if ab_are_real or force_gpu is False:
+        print("ab_are_real or force_gpu is False")
+        result = tf.sparse_tensor_dense_matmul(sp_a, b, adjoint_a, adjoint_b)
+
+    elif sp_a_is_complex is False and b_is_complex:
+        print("sp_a_is_complex is False and b_is_complex")
+        real_b = tf.math.real(b)
+        imag_b = tf.math.imag(b)
+
+        imag = tf.sparse_tensor_dense_matmul(sp_a, imag_b, adjoint_a,
+            adjoint_b)
+        real = tf.sparse_tensor_dense_matmul(sp_a, real_b, adjoint_a,
+            adjoint_b)
+
+        result = tf.add(
+            tf.cast(real, dtype=b.dtype),
+            1j*tf.cast(imag, dtype=b.dtype)
+        )
+
+    elif b_is_complex is False and sp_a_is_complex:
+        print("b_is_complex is False and sp_a_is_complex")
+        real_a, imag_a = break_sparse_tensor(sp_a)
+
+        imag = tf.sparse_tensor_dense_matmul(imag_a, b, adjoint_a,
+            adjoint_b)
+        real = tf.sparse_tensor_dense_matmul(real_a, b, adjoint_a,
+            adjoint_b)
+
+        result = tf.add(
+            tf.cast(real, dtype=sp_a.dtype),
+            1j*tf.cast(imag, dtype=sp_a.dtype)
+        )
+
+    elif b_is_complex and sp_a_is_complex:
+        real_a, imag_a = break_sparse_tensor(sp_a)
+
+        real_b = tf.math.real(b)
+        imag_b = tf.math.imag(b)
+
+        #pure imaginary
+
+        imag_a_real_b = tf.sparse_tensor_dense_matmul(imag_a, real_b, adjoint_a,
+            adjoint_b)
+        real_a_imag_b = tf.sparse_tensor_dense_matmul(real_a, imag_b, adjoint_a,
+            adjoint_b)
+        imag = tf.add(imag_a_real_b, real_a_imag_b)
+
+        # real
+        real_a_real_b = tf.sparse_tensor_dense_matmul(real_a, real_b, adjoint_a,
+            adjoint_b)
+
+        imag_a_imag_b = tf.sparse_tensor_dense_matmul(imag_a, imag_b, adjoint_a,
+            adjoint_b)
+        real = tf.subtract(real_a_real_b, imag_a_imag_b )
+
+        result = tf.add(
+            tf.cast(imag, dtype=sp_a.dtype),
+            1j*tf.cast(real, dtype=sp_a.dtype)
+        )
+
+    return result
+
+
 def get_tf_dtype(precision=32):
     if precision == 32:
         return tf.float32, tf.complex64
@@ -23,8 +102,7 @@ def get_tf_dtype(precision=32):
 
 
 def replace_by_indices(input_matrix, values, indices, name_scope=None):
-    """
-    Given an input_matrix, replaces the values given a set of indices.
+    """ Given an input_matrix, replaces the values given a set of indices.
 
     Parameters
     ----------
