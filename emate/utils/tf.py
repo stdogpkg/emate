@@ -25,7 +25,7 @@ def break_sparse_tensor(a):
     return real, imag
 
 
-def sparse_tensor_dense_matmul_gpu(sp_a, b, force_gpu=True, adjoint_a=False,
+def sparse_tensor_dense_matmul_gpu(sp_a, b, force_gpu=False, adjoint_a=False,
     adjoint_b=False):
 
     sp_a_is_complex = sp_a.dtype.is_complex
@@ -65,6 +65,7 @@ def sparse_tensor_dense_matmul_gpu(sp_a, b, force_gpu=True, adjoint_a=False,
         )
 
     elif b_is_complex and sp_a_is_complex:
+        print("booth complex")
         real_a, imag_a = break_sparse_tensor(sp_a)
 
         real_b = tf.math.real(b)
@@ -87,8 +88,8 @@ def sparse_tensor_dense_matmul_gpu(sp_a, b, force_gpu=True, adjoint_a=False,
         real = tf.subtract(real_a_real_b, imag_a_imag_b )
 
         result = tf.add(
-            tf.cast(imag, dtype=sp_a.dtype),
-            1j*tf.cast(real, dtype=sp_a.dtype)
+            tf.cast(real, dtype=sp_a.dtype),
+            1j*tf.cast(imag, dtype=sp_a.dtype)
         )
 
     return result
