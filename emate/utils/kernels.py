@@ -16,10 +16,12 @@ Available methods
 import tensorflow as tf
 import numpy as np
 
+from emate.utils.tf import get_tf_dtype
+
 
 def jackson(
     num_moments,
-    tf_float,
+    precision=32,
     name_scope=None
 ):
     """
@@ -44,6 +46,8 @@ def jackson(
         See .. _The Kernel Polynomial Method:
         https://arxiv.org/pdf/cond-mat/0504627.pdf for more details
     """
+
+    tf_float = get_tf_dtype(precision)[0]
     with tf.name_scope(name_scope, "jackson_kernel"):
 
         kernel_moments = tf.range(0, num_moments, dtype=tf_float)
@@ -62,7 +66,7 @@ def jackson(
 def lorentz(
     num_moments,
     l,
-    tf_float,
+    precision=32,
     name_scope=None
 ):
     """
@@ -89,6 +93,8 @@ def lorentz(
         See .. _The Kernel Polynomial Method:
         https://arxiv.org/pdf/cond-mat/0504627.pdf for more details
     """
+    tf_float = get_tf_dtype(precision)[0]
+
     with tf.name_scope(name_scope, "lorentz_kernel"):
 
         kernel_moments = tf.range(0, num_moments, dtype=tf_float)

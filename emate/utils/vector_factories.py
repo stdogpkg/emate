@@ -15,12 +15,12 @@ Available methods
 import tensorflow as tf
 import numpy as np
 
+from emate.utils.tf import get_tf_dtype
+
 
 def normal_complex(
     shape,
-    return_complex=False,
-    tf_float=tf.float32,
-    tf_complex=tf.complex64,
+    precision=32,
     name_scope=None
 ):
     r"""Generates a set of complex random vectors
@@ -30,47 +30,29 @@ def normal_complex(
     Parameters
     ----------
         shape: (int, int) dimension matrix
-        return_complex: (boll)(default=False)
-            The vast majority of methods implemented in tf only works with
-            float types. Therefore, sometimes it most convinient perform all
-            calculations using imag and real part of vectors, and after that
-            peform the  operation.
-        tf_float: (tensorflow float type)
+
         tf_complex: (tensorflow complex type)
         name_scope: (str)(default="random_vec_factory")
             scope name for tensorflow
 
     Returns
     ------
-        alpha0: Tensor(shape=(dimension, num_vecs), dtype=tf_complex)
-        alpha1: Tensor(shape=(dimension, num_vecs), dtype=tf_complex)
+        vector: Tensor(shape=shape, dtype=tf_complex)
 
     """
-    if return_complex:
-        tf_type = tf_complex
-    else:
-        tf_type = tf_float
-
-    with tf.name_scope(name_scope, "random_vec_factory"):
+    tf_float, tf_complex = get_tf_dtype(precision)
+    with tf.name_scope(name_scope, "normal_complex"):
 
         random_phases = 2.*np.pi*tf.random.uniform(
             shape,
-            dtype=tf_type
+            dtype=tf_float
         )
-        if return_complex:
-            return tf.exp(1j*random_phases)
-
-        else:
-            vec_sin = tf.sin(
-                random_phases
-            )
-            vec_cos = tf.cos(
-                random_phases
-            )
-            return vec_cos, vec_sin
+        random_phases = tf.cast(random_phases, tf_complex)
+        vector = tf.exp(1j*random_phases)
+        return vector
 
 
-def radamacher(shape, norm=True, tf_float=tf.float32, name_scope=None):
+def radamacher(shape, norm=True, precision=32, name_scope=None):
     """Generates a set of Radamacher vectors.
 
     Parameters
@@ -87,6 +69,7 @@ def radamacher(shape, norm=True, tf_float=tf.float32, name_scope=None):
         vec: Tensor(shape=shape, dtype=tf_float)
 
     """
+    tf_float = get_tf_dtype(precision)[0]
     with tf.name_scope("radamacher_factory", name_scope):
         vec = tf.sign(tf.random.normal(shape, dtype=tf_float))
         if norm:

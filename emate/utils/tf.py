@@ -15,8 +15,14 @@ Available methods
 import tensorflow as tf
 
 
-def replace_by_indices(input_matrix, values, indices,
-                       tf_type=tf.float32, name_scope=None):
+def get_tf_dtype(precision=32):
+    if precision == 32:
+        return tf.float32, tf.complex64
+    elif precision == 64:
+        return tf.float64, tf.complex128
+
+
+def replace_by_indices(input_matrix, values, indices, name_scope=None):
     """
     Given an input_matrix, replaces the values given a set of indices.
 
@@ -25,7 +31,6 @@ def replace_by_indices(input_matrix, values, indices,
         input_matrix: Tensor(shape=(dimension, dimension), dtype=tf_type)
         values: Tensor(shape=(None,), dtype=tf_type)
         indices: Tensor(shape=(None, 2), dtype=int64)
-        tf_type: (tensorflow type)(default=tf.float32)
         name_scope: (str)(default="replace_by_indices")
             scope name for tensorflow
 
@@ -34,7 +39,7 @@ def replace_by_indices(input_matrix, values, indices,
         output_matrix: Tensor(shape=(dimension, dimension), dtype=tf_type)
 
     """
-
+    tf_type = input_matrix.dtype
     with tf.name_scope("replace_by_indices", name_scope):
 
         identity_matrix = tf.eye(
