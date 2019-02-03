@@ -14,3 +14,5 @@ kpm: Kernel Polynomial Method
     to obtain such approximation.
 
 """
+from emate.hermitian.kpm import kpm
+__all__ =["kpm"]

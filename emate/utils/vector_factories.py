@@ -23,10 +23,10 @@ def normal_complex(
     tf_complex=tf.complex64,
     name_scope=None
 ):
-    """
-    Generates a set of complex random vectors
+    r"""Generates a set of complex random vectors
+    .. math::
+        v = [e^{2\pi i \phi_0}\dots e^{2\pi i \phi_n}]
 
-    $ v = [e^{2\pi i \phi_0}\dots e^{2\pi i \phi_n}]$
     Parameters
     ----------
         shape: (int, int) dimension matrix
@@ -71,8 +71,7 @@ def normal_complex(
 
 
 def radamacher(shape, norm=True, tf_float=tf.float32, name_scope=None):
-    """
-    Generates a set of Radamacher vectors.
+    """Generates a set of Radamacher vectors.
 
     Parameters
     ----------

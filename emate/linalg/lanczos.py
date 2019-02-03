@@ -1,9 +1,7 @@
 """
 Lanczos
-=======
 
-Available methods
------------------
+
 
 lanczos_step
 

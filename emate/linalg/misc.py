@@ -1,9 +1,8 @@
 """
-Linear Algebra Tools - Misc
-===========================
+Misc
+---------------------------
 
-Available methods
------------------
+
 
 get_bounds
 

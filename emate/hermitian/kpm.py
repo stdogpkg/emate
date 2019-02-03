@@ -233,11 +233,6 @@ def apply_kernel(
         name_scope: (str) (default="get_jackson_kernel")
             scope name for tensorflow
 
-    Return
-    ------
-
-    Note
-    ----
 
     """
 
