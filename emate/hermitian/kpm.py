@@ -29,7 +29,7 @@ import tensorflow as tf
 import numpy as np
 
 from emate.linalg import rescale_matrix
-from emate.utils.kernels import get_jackson_kernel
+from emate.utils.kernels import jackson as jackson_kernel
 from emate.utils.vector_factories import normal_complex
 
 
@@ -230,7 +230,7 @@ def apply_kernel(
 
         tf_float: (tensorflow float type)
             valids values are tf.float32, tf.float64, or tf.float128
-        name_scope: (str) (default="get_jackson_kernel")
+        name_scope: (str) (default="jackson_kernel")
             scope name for tensorflow
 
 
@@ -358,10 +358,10 @@ def kpm(
                 swap_memory=True,
 
             )
-            kernel = get_jackson_kernel(num_moments, tf_float)
+            kernel0 = jackson_kernel(num_moments, tf_float)
             ek, rho = apply_kernel(
                 moments,
-                kernel,
+                kernel0,
                 scale_fact_a,
                 scale_fact_b,
                 dimension,
