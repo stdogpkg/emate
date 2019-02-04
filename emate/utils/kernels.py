@@ -51,12 +51,13 @@ def jackson(
     with tf.name_scope(name_scope, "jackson_kernel"):
 
         kernel_moments = tf.range(0, num_moments, dtype=tf_float)
-        phases = 2.*np.pi*kernel_moments/(num_moments+1)
+        norm = np.pi/(num_moments+1)
+        phases = kernel_moments*norm
 
         kernel = tf.div(
                 tf.add(
                     (num_moments-kernel_moments+1)*tf.cos(phases),
-                    tf.sin(phases)/tf.tan(np.pi/(num_moments+1))
+                    tf.sin(phases)/tf.tan(norm)
                 ),
                 (num_moments+1)
             )
