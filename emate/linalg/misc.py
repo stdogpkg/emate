@@ -80,7 +80,7 @@ def get_bounds(
     return lmin, lmax
 
 
-def rescale_matrix(H, lmin, lmax, epsilon=0.01):
+def rescale_matrix(H, lmin=None, lmax=None, epsilon=0.01):
     """
     Return a  rescaled H matrix, so that  the eigenvalues associated
 are in the range $[-1, 1]$.

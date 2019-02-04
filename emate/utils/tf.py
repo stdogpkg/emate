@@ -13,6 +13,7 @@ Available methods
 
 
 import tensorflow as tf
+import numpy as np
 
 
 def break_sparse_tensor(a):
@@ -31,12 +32,11 @@ def sparse_tensor_dense_matmul_gpu(sp_a, b, force_gpu=False, adjoint_a=False,
     sp_a_is_complex = sp_a.dtype.is_complex
     b_is_complex = b.dtype.is_complex
     ab_are_real = sp_a_is_complex is False and b_is_complex is False
+
     if ab_are_real or force_gpu is False:
-        print("ab_are_real or force_gpu is False")
         result = tf.sparse_tensor_dense_matmul(sp_a, b, adjoint_a, adjoint_b)
 
     elif sp_a_is_complex is False and b_is_complex:
-        print("sp_a_is_complex is False and b_is_complex")
         real_b = tf.math.real(b)
         imag_b = tf.math.imag(b)
 
@@ -51,7 +51,6 @@ def sparse_tensor_dense_matmul_gpu(sp_a, b, force_gpu=False, adjoint_a=False,
         )
 
     elif b_is_complex is False and sp_a_is_complex:
-        print("b_is_complex is False and sp_a_is_complex")
         real_a, imag_a = break_sparse_tensor(sp_a)
 
         imag = tf.sparse_tensor_dense_matmul(imag_a, b, adjoint_a,
@@ -65,7 +64,6 @@ def sparse_tensor_dense_matmul_gpu(sp_a, b, force_gpu=False, adjoint_a=False,
         )
 
     elif b_is_complex and sp_a_is_complex:
-        print("booth complex")
         real_a, imag_a = break_sparse_tensor(sp_a)
 
         real_b = tf.math.real(b)
@@ -165,3 +163,24 @@ def replace_by_indices(input_matrix, values, indices, name_scope=None):
         )
 
         return output_matrix
+
+
+def scipy2tensor(scipy_sp_a, precision=32):
+    coo = scipy_sp_a.tocoo()
+    if np.isrealobj(coo.data):
+        if precision == 32:
+            np_type = np.float32
+        elif precision == 64:
+            np_type = np.float64
+    else:
+        if precision == 32:
+            np_type = np.complex64
+        elif precision == 64:
+            np_type = np.complex128
+
+    data = np.array(coo.data, dtype=np_type)
+
+    shape = np.array(coo.shape, dtype=np.int32)
+    indices = np.mat([coo.row, coo.col], dtype=np.float32).transpose()
+    sp_a = tf.SparseTensor(indices, data, shape)
+    return sp_a
