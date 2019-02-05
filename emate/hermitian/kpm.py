@@ -77,7 +77,7 @@ def get_moments(
         num_iter_while = tf.constant(int(num_moments//2-1))
         alpha1 = sparse_tensor_dense_matmul_gpu(H, alpha0, force_gpu=force_gpu)
 
-            # first_moment.shape = (num_vecs, )
+        # first_moment.shape = (num_vecs, )
         if complex_eval:
             alpha0conj = tf.conj(alpha0)
         else:
@@ -132,7 +132,8 @@ def get_moments(
             num_iter_while
         ):
 
-            matrix_mul = 2.*sparse_tensor_dense_matmul_gpu(H, alpha1, force_gpu=force_gpu)
+            matrix_mul = 2.*sparse_tensor_dense_matmul_gpu(H, alpha1,
+                force_gpu=force_gpu)
 
             alpha2 = matrix_mul-alpha0
 
@@ -226,7 +227,6 @@ def apply_kernel(
     name_scope=None
 ):
     """
-
     Parameters
     ----------
 
@@ -268,7 +268,7 @@ def apply_kernel(
         smooth_moments = tf.reshape(smooth_moments, [num_points])
         smooth_moments = tf.spectral.dct(smooth_moments, type=3)
 
-        points = tf.range(num_points, dtype=moments.dtype)
+        points = tf.range(num_points, dtype=tf.float32)
 
         ek = tf.cos(np.pi*(points+0.5)/(num_points))
         gk = np.pi*tf.sqrt(1.-ek**2)
@@ -296,9 +296,7 @@ def pykpm(
     device='/gpu:0',
     swap_memory_while=False,
 ):
-
     """
-
     Parameters
     ----------
 
@@ -322,10 +320,22 @@ def pykpm(
     with tf.device(device):
 
         Htf = scipy2tensor(H, precision=precision)
-        alpha0 = normal_complex(shape=(dimension, num_vecs), precision=precision)
+        alpha0 = normal_complex(
+            shape=(dimension, num_vecs),
+            precision=precision
+        )
         moments = get_moments(Htf, num_vecs, num_moments, alpha0)
-        kernel0 = jackson_kernel(num_moments)
-        ek, rho = apply_kernel(moments, kernel0, dimension, num_moments, num_vecs, extra_points)
+        kernel0 = jackson_kernel(num_moments, precision=32)
+        if precision == 64:
+            moments = tf.cast(moments, tf.float32)
+        ek, rho = apply_kernel(
+            moments,
+            kernel0,
+            dimension,
+            num_moments,
+            num_vecs,
+            extra_points
+        )
         ek, rho = rescale_kpm(ek, rho, scale_fact_a, scale_fact_b)
 
     with tf.Session() as sess:
