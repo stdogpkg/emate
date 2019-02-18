@@ -73,10 +73,8 @@ def lanczos_step(
     return alpha, beta, wn, w, t
 
 
-
 def lanczos(A, dimension, v0, num_steps, tf_float=tf.float32, orth_tol=1e-8):
     """
-
     Parameters
     ----------
 
@@ -223,3 +221,6 @@ def lanczos(A, dimension, v0, num_steps, tf_float=tf.float32, orth_tol=1e-8):
         )
 
         return V, alphas, betas, ortho_ok, i_step - 1
+
+
+__all__ = ["lanczos", "lanczos_step"]

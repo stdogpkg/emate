@@ -14,9 +14,9 @@ trace_estimator
 import tensorflow as tf
 import numpy as np
 
-from emate.utils.vector_factories import radamacher
-from emate.linalg.lanczos import lanczos
-from emate.utils import replace_by_indices
+from emate.utils.tfops.vector_factories import radamacher
+from emate.utils.tfops.misc import replace_by_indices
+from emate.linalg.tfops.lanczos import lanczos
 
 
 def trace_estimator(
@@ -29,7 +29,6 @@ def trace_estimator(
     parallel_iterations=10,
     swap_memory=False,
     infer_shape=False,
-    tf_float=tf.float32,
     name_scope=None
 ):
     """
@@ -50,7 +49,6 @@ def trace_estimator(
         parallel_iterations=10,
         swap_memory=False,
         infer_shape=False,
-        tf_type: (tensorflow float type)(default=tf.float32)
         name_scope: (str)(default="replace_by_indices")
             scope name for tensorflow
 
@@ -58,15 +56,16 @@ def trace_estimator(
     -------
         output_matrix: Tensor(shape=(dimension, dimension), dtype=tf_type)
     """
+    tf_type = A.dtype
     with tf.name_scope("Trace_Estimator"):
         with tf.name_scope("init_vars"):
-            nv = tf.constant(num_vecs, dtype=tf_float, name="nv")
-            n = tf.constant(dimension, dtype=tf_float, name="n")
+            nv = tf.constant(num_vecs, dtype=tf_type, name="nv")
+            n = tf.constant(dimension, dtype=tf_type, name="n")
             factor = tf.divide(n, nv, "n/nv")
         with tf.name_scope("sthocastic_step"):
             def sthocastic_step(i_step):
                 with tf.name_scope("init_vars"):
-                    v0 = random_factory((dimension, 1), tf_float)
+                    v0 = random_factory((dimension, 1), tf_type)
 
                 V, alphas, betas, ortho_ok, num_alphas = lanczos(
                     A, dimension, v0, num_steps)
@@ -101,7 +100,7 @@ def trace_estimator(
     gammas = tf.map_fn(
         sthocastic_step,
         np.arange(0, num_vecs),
-        dtype=(tf_float),
+        dtype=tf_type,
         parallel_iterations=parallel_iterations,
         swap_memory=swap_memory,
         infer_shape=infer_shape,
@@ -112,3 +111,6 @@ def trace_estimator(
         factor*gammas, axis=0, name="f_estimation"
     )
     return f_estimation, gammas
+
+
+__all__ = ["trace_estimator"]

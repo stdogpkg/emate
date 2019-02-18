@@ -31,7 +31,6 @@ def get_bounds(
     function. Therefore, you should give a look in the documentation of
     .. _sparse.linalg.eigsh: https://docs.scipy.org/doc/scipy/reference/generated/scipy.sparse.linalg.eigsh.html
 
-
     Parameters
     ----------
         H: (scipy sparse matrix) A hermitian matrix in sparse format
@@ -80,7 +79,7 @@ def get_bounds(
     return lmin, lmax
 
 
-def rescale_matrix(H, lmin=None, lmax=None, epsilon=0.01):
+def rescale_matrix(H, lmin=None, lmax=None, epsilon=0.05):
     """
     Return a  rescaled H matrix, so that  the eigenvalues associated
 are in the range $[-1, 1]$.
@@ -106,3 +105,6 @@ are in the range $[-1, 1]$.
     H_rescaled = (1/scale_fact_a)*(H-1*scale_fact_b*sparse.eye(dimension))
 
     return H_rescaled, scale_fact_a, scale_fact_b
+
+
+__all__ = ["get_bounds", "rescale_matrix"]

@@ -1,14 +1,3 @@
-"""
-Utils
-=====
+from . import tfops
 
-Available submodules
----------------------
-
-kernels
-
-misc
-
-vector_factories
-"""
-from emate.utils.tf import replace_by_indices
+__all__ = ["tfops"]

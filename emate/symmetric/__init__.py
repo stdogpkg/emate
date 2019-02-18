@@ -9,5 +9,8 @@ misc
 
 lanczos
 """
+from . import tfops
+from .slq import pytrace_estimator
 
-from emate.linalg.misc import*
+
+__all__ = ["tfops", "pytrace_estimator"]

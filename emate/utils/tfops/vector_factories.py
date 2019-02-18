@@ -15,8 +15,6 @@ Available methods
 import tensorflow as tf
 import numpy as np
 
-from emate.utils.tf import get_tf_dtype
-
 
 def normal_complex(
     shape,
@@ -40,7 +38,11 @@ def normal_complex(
         vector: Tensor(shape=shape, dtype=tf_complex)
 
     """
-    tf_float, tf_complex = get_tf_dtype(precision)
+    tf_float = tf.float64
+    tf_complex = tf.complex128
+    if precision == 32:
+        tf_float = tf.float32
+        tf_complex = tf.complex64
     with tf.name_scope(name_scope, "normal_complex"):
 
         random_phases = 2.*np.pi*tf.random.uniform(
@@ -69,9 +71,15 @@ def radamacher(shape, norm=True, precision=32, name_scope=None):
         vec: Tensor(shape=shape, dtype=tf_float)
 
     """
-    tf_float = get_tf_dtype(precision)[0]
+    tf_float = tf.float64
+    if precision == 32:
+        tf_float = tf.float32
+
     with tf.name_scope("radamacher_factory", name_scope):
         vec = tf.sign(tf.random.normal(shape, dtype=tf_float))
         if norm:
             vec = tf.divide(vec, tf.norm(vec))
         return vec
+
+
+__all__ = ["normal_complex", "radamacher"]

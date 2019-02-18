@@ -10,8 +10,6 @@ Available methods
         Given an input_matrix, replaces the values given a set of indices.
 
 """
-
-
 import tensorflow as tf
 import numpy as np
 
@@ -26,8 +24,13 @@ def break_sparse_tensor(a):
     return real, imag
 
 
-def sparse_tensor_dense_matmul_gpu(sp_a, b, force_gpu=False, adjoint_a=False,
-    adjoint_b=False):
+def sparse_tensor_dense_matmul_gpu(
+    sp_a,
+    b,
+    force_gpu=False,
+    adjoint_a=False,
+    adjoint_b=False
+):
 
     sp_a_is_complex = sp_a.dtype.is_complex
     b_is_complex = b.dtype.is_complex
@@ -91,13 +94,6 @@ def sparse_tensor_dense_matmul_gpu(sp_a, b, force_gpu=False, adjoint_a=False,
         )
 
     return result
-
-
-def get_tf_dtype(precision=32):
-    if precision == 32:
-        return tf.float32, tf.complex64
-    elif precision == 64:
-        return tf.float64, tf.complex128
 
 
 def replace_by_indices(input_matrix, values, indices, name_scope=None):
@@ -184,3 +180,11 @@ def scipy2tensor(scipy_sp_a, precision=32):
     indices = np.mat([coo.row, coo.col], dtype=np.float32).transpose()
     sp_a = tf.SparseTensor(indices, data, shape)
     return sp_a
+
+
+__all__ = [
+    "break_sparse_tensor",
+    "sparse_tensor_dense_matmul_gpu",
+    "replace_by_indices",
+    "scipy2tensor"
+]
