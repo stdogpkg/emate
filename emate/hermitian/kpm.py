@@ -24,13 +24,12 @@ get_moments:
 apply_kernel
 
 """
-
+import numpy as np
 import tensorflow as tf
 
 from emate.linalg import rescale_matrix
 
 from emate.utils.tfops.vector_factories import normal_complex
-from emate.utils.tfops.misc import scipy2tensor
 
 from emate.utils.tfops.kernels import jackson as jackson_kernel
 from .tfops.kpm import get_moments, apply_kernel, rescale_kpm
@@ -66,12 +65,46 @@ def KPM(
     """
 
     H, scale_fact_a, scale_fact_b = rescale_matrix(H, lmin, lmax,)
+
+    coo = H.tocoo()
+    if np.iscomplexobj(coo.data):
+        if precision == 32:
+            np_type = np.complex64
+            tf_type = tf.complex64
+        else:
+            np_type = np.complex128
+            tf_type = tf.complex128
+    else:
+        if precision == 32:
+            np_type = np.float32
+            tf_type = tf.float32
+        else:
+            np_type = np.float64
+            tf_type = tf.float64
+
+    sp_values = np.array(coo.data, dtype=np_type)
+    sp_indices = np.mat([coo.row, coo.col], dtype=np.int64).transpose()
+
+    feed_dict = {
+        "sp_values:0": sp_values,
+        "sp_indices:0": sp_indices,
+    }
+
     dimension = H.shape[0]
 
     tf.reset_default_graph()
     with tf.device(device):
+        sp_indices = tf.placeholder(dtype=tf.int64, name="sp_indices")
+        sp_values = tf.placeholder(
+            dtype=tf_type,
+            name="sp_values"
+        )
+        Htf = tf.SparseTensor(
+            sp_indices,
+            sp_values,
+            dense_shape=np.array(H.shape, dtype=np.int32)
+        )
 
-        Htf = scipy2tensor(H, precision=precision)
         alpha0 = normal_complex(
             shape=(dimension, num_vecs),
             precision=precision
@@ -91,7 +124,7 @@ def KPM(
         ek, rho = rescale_kpm(ek, rho, scale_fact_a, scale_fact_b)
 
     with tf.Session() as sess:
-        ek, rho = sess.run([ek, rho])
+        ek, rho = sess.run([ek, rho], feed_dict)
 
     return ek, rho
 
