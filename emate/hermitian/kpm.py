@@ -35,7 +35,7 @@ from emate.utils.tfops.kernels import jackson as jackson_kernel
 from .tfops.kpm import get_moments, apply_kernel, rescale_kpm
 
 
-def KPM(
+def pykpm(
     H,
     num_moments,
     num_vecs,
@@ -99,7 +99,7 @@ def KPM(
             dtype=tf_type,
             name="sp_values"
         )
-        Htf = tf.SparseTensor(
+        H = tf.SparseTensor(
             sp_indices,
             sp_values,
             dense_shape=np.array(H.shape, dtype=np.int32)
@@ -109,7 +109,7 @@ def KPM(
             shape=(dimension, num_vecs),
             precision=precision
         )
-        moments = get_moments(Htf, num_vecs, num_moments, alpha0)
+        moments = get_moments(H, num_vecs, num_moments, alpha0)
         kernel0 = jackson_kernel(num_moments, precision=32)
         if precision == 64:
             moments = tf.cast(moments, tf.float32)
@@ -129,4 +129,4 @@ def KPM(
     return ek, rho
 
 
-__all__ = ["KPM"]
+__all__ = ["pykpm"]
