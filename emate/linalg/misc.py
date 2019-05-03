@@ -41,40 +41,38 @@ def get_bounds(
         lmax: (float) largest eigenvalue
 
     """
-    lmax = float(
-        sparse.linalg.eigsh(
-            H,
-            k=1,
-            which="LA",
-            return_eigenvectors=False,
-            M=M,
-            sigma=sigma,
-            v0=v0,
-            ncv=ncv,
-            maxiter=maxiter,
-            tol=tol,
-            Minv=Minv,
-            OPinv=OPinv,
-            mode=mode
-        )
-    )
-    lmin = float(
-        sparse.linalg.eigsh(
-            H,
-            k=1,
-            which="SA",
-            return_eigenvectors=False,
-            M=M,
-            sigma=sigma,
-            v0=v0,
-            ncv=ncv,
-            maxiter=maxiter,
-            tol=tol,
-            Minv=Minv,
-            OPinv=OPinv,
-            mode=mode
-        )
-    )
+    lmax = sparse.linalg.eigsh(
+        H,
+        k=1,
+        which="LA",
+        return_eigenvectors=False,
+        M=M,
+        sigma=sigma,
+        v0=v0,
+        ncv=ncv,
+        maxiter=maxiter,
+        tol=tol,
+        Minv=Minv,
+        OPinv=OPinv,
+        mode=mode
+    )[0]
+    
+    lmin = sparse.linalg.eigsh(
+        H,
+        k=1,
+        which="SA",
+        return_eigenvectors=False,
+        M=M,
+        sigma=sigma,
+        v0=v0,
+        ncv=ncv,
+        maxiter=maxiter,
+        tol=tol,
+        Minv=Minv,
+        OPinv=OPinv,
+        mode=mode
+    )[0]
+    
 
     return lmin, lmax
 
