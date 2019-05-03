@@ -17,7 +17,7 @@ from emate.utils.tfops.vector_factories import radamacher
 from .tfops.slq import trace_estimator
 
 
-def pytrace(
+def pyslq(
     A,
     num_vecs,
     num_steps,
