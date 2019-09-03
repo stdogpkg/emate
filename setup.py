@@ -1,33 +1,34 @@
 from setuptools import setup, find_packages
 
-readme = open('README', 'r')
-README_TEXT = readme.read()
-readme.close()
+
+with open("README.md", "r") as f:
+    README_TEXT = f.read()
 
 setup(
     name="eMaTe",
-    version="0.0.1",
+    version="v1.0.0",
     packages=find_packages(exclude=["build", ]),
     long_description=README_TEXT,
-    # install_requires=["tensorflow", "scipy", "numpy"],
+    long_description_content_type="text/markdown",
+    install_requires=["tensorflow", "scipy", "numpy"],
     include_package_data=True,
-    license="",
+    license="MIT",
     description="",
     author_email="messias.physics@gmail.com",
-    author="Bruno Messias;",
-    # download_url=
-    # "https://github.com/devmessias/emate/archive/0.0.1.tar.gz",
+    author="Bruno Messias; Thomas K Peron",
+    download_url="https://github.com/stdogpkg/emate/archive/v1.0.0.tar.gz",
     keywords=[
         "gpu", "science", "complex-networks", "graphs", "matrices", "kpm",
-         "tensorflow", "chebyscev"
+         "tensorflow", "chebyshev", "spectral", "eigenvalues"
     ],
     classifiers=[
-        #"Development Status :: 4 - Beta",
-        #("License :: OSI Approved :: GNU Affero General Public License v3 or",
-        # "later  (AGPLv3+)"),
+        "Development Status :: 4 - Beta",
+        "License :: OSI Approved :: MIT License",
         "Intended Audience :: Science/Research",
-        "Programming Language :: Python",
-        "Topic :: Text Processing :: Markup :: LaTeX",
+        "Programming Language :: Python :: 3",
+        "Topic :: Scientific/Engineering :: Physics",
+        "Topic :: Scientific/Engineering :: Mathematics",
+        "Topic :: Scientific/Engineering :: Information Analysis"
     ],
-    url="https://github.com/devmessias/emate"
+    url="https://github.com/stdogpkg/emate"
 )
