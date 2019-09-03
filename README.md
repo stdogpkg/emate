@@ -1,4 +1,4 @@
-# ![](emate_logo.png) eMaTe
+# ![eMaTe](emate.png)
 
 eMaTe is a python package implemented in tensorflow which the main goal is provide useful methods capable of estimate spectral densities and trace functions of large sparse matrices. 
 
