@@ -8,9 +8,8 @@ get_bounds
 
 rescale_matrix
 """
-
-
-from scipy import sparse
+import scipy
+import scipy.sparse.linalg
 
 
 def get_bounds(
@@ -41,7 +40,7 @@ def get_bounds(
         lmax: (float) largest eigenvalue
 
     """
-    lmax = sparse.linalg.eigsh(
+    lmax = scipy.sparse.linalg.eigsh(
         H,
         k=1,
         which="LA",
@@ -57,7 +56,7 @@ def get_bounds(
         mode=mode
     )[0]
     
-    lmin = sparse.linalg.eigsh(
+    lmin = scipy.sparse.linalg.eigsh(
         H,
         k=1,
         which="SA",
@@ -100,7 +99,8 @@ are in the range $[-1, 1]$.
     dimension = H.shape[0]
     scale_fact_a = (lmax - lmin) / (2. - epsilon)
     scale_fact_b = (lmax + lmin) / 2
-    H_rescaled = (1/scale_fact_a)*(H-1*scale_fact_b*sparse.eye(dimension))
+    H_rescaled = (1/scale_fact_a)*(
+        H-1*scale_fact_b*scipy.sparse.eye(dimension))
 
     return H_rescaled, scale_fact_a, scale_fact_b
 
