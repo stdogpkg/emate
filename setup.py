@@ -5,7 +5,7 @@ with open("README.md", "r") as f:
     README_TEXT = f.read()
 
 setup(
-    name="eMaTe",
+    name="emate",
     version="v1.0.0",
     packages=find_packages(exclude=["build", ]),
     long_description=README_TEXT,
