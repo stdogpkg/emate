@@ -6,7 +6,7 @@ with open("README.md", "r") as f:
 
 setup(
     name="emate",
-    version="v1.0.1",
+    version="v1.0.2",
     packages=find_packages(exclude=["build", ]),
     long_description=README_TEXT,
     long_description_content_type="text/markdown",
@@ -16,7 +16,7 @@ setup(
     description="",
     author_email="messias.physics@gmail.com",
     author="Bruno Messias; Thomas K Peron",
-    download_url="https://github.com/stdogpkg/emate/archive/v1.0.1.tar.gz",
+    download_url="https://github.com/stdogpkg/emate/archive/v1.0.2.tar.gz",
     keywords=[
         "gpu", "science", "complex-networks", "graphs", "matrices", "kpm",
          "tensorflow", "chebyshev", "spectral", "eigenvalues"
