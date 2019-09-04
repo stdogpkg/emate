@@ -9,8 +9,8 @@ misc
 
 lanczos
 """
-from . import tfops
-from .slq import pyslq
+from emate.symmetric import tfops
+from emate.symmetric.slq import pyslq
 
 
 __all__ = ["tfops", "pyslq"]

@@ -13,12 +13,15 @@ The Kernel Polynomial Method can estimate the spectral density of large sparse 
 ```python
 import igraph as ig
 import numpy as np
-from scipy import sparse
+import scipy
+from scipy.sparse
 
+
+L_sparse = scipy.sparse.coo_matrix(L)
 g = ig.Graph.Erdos_Renyi(3000, 3/3000)
 W = np.array(g.get_adjacency().data, dtype=np.float64)
-L_sparse = sparse.coo_matrix(L)
 vals_laplacian = np.linalg.eigvals(L).real
+L_sparse = scipy.sparse.coo_matrix(L)
 ```
 
 ```python
