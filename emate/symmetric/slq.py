@@ -14,7 +14,7 @@ import numpy as np
 import tensorflow as tf
 
 from emate.utils.tfops.vector_factories import radamacher
-from .tfops.slq import trace_estimator
+from emate.symmetric.tfops.slq import trace_estimator
 
 
 def pyslq(

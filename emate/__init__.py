@@ -22,14 +22,14 @@ Subpackages
   emate.utils
 
 """
-from . import hermitian
-from . import symmetric
+from emate import hermitian
+from emate import symmetric
 
-from . import linalg
-from . import utils
-__version__ = "0.0.1"
+from emate import linalg
+from emate import utils
+__version__ = "1.0.1"
 __license__ = ""
-__author__ = "Bruno Messias"
+__author__ = "Bruno Messias; Thomas K Peron"
 __author_email__ = "messias.physics@gmail.com"
 __name__ = "eMaTe"
 

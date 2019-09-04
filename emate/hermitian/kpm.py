@@ -32,7 +32,7 @@ from emate.linalg import rescale_matrix
 from emate.utils.tfops.vector_factories import normal_complex
 
 from emate.utils.tfops.kernels import jackson as jackson_kernel
-from .tfops.kpm import get_moments, apply_kernel, rescale_kpm
+from emate.hermitian.tfops.kpm import get_moments, apply_kernel, rescale_kpm
 
 
 def pykpm(
