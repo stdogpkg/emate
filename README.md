@@ -2,10 +2,14 @@
 
 eMaTe is a python package implemented in tensorflow which the main goal is provide useful methods capable of estimate spectral densities and trace functions of large sparse matrices. 
 
+## Install                                                                                                              
+```
+pip install emate
+```
 
 ## Kernel Polynomial Method (KPM)
 
-The Kernel Polynomial Method can estimate the spectral density of large sparse Hermitan matrices with a computaional cost almost linear. This method combines three key ingredients, the Chebyshev expansion, the stochastic trace estimator and kernel smoothing.
+The Kernel Polynomial Method can estimate the spectral density of large sparse Hermitan matrices with a computational cost almost linear. This method combines three key ingredients: the Chebyshev expansion + the stochastic trace estimator + kernel smoothing.
 
 
 ### Example
