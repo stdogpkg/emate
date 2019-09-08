@@ -13,24 +13,34 @@ The Kernel Polynomial Method can estimate the spectral density of large sparse 
 ```python
 import igraph as ig
 import numpy as np
-import scipy
-from scipy.sparse
 
+N = 3000
+G = ig.Graph.Erdos_Renyi(N, 3/N)
 
-L_sparse = scipy.sparse.coo_matrix(L)
-g = ig.Graph.Erdos_Renyi(3000, 3/3000)
-W = np.array(g.get_adjacency().data, dtype=np.float64)
-vals_laplacian = np.linalg.eigvals(L).real
-L_sparse = scipy.sparse.coo_matrix(L)
+W = np.array(G.get_adjacency().data, dtype=np.float64)
+vals = np.linalg.eigvalsh(W).real
 ```
 
 ```python
 from emate.hermitian import pykpm
-num_moments = 50
-num_vecs = 100
+from stdog.utils.misc import ig2sparse 
+
+W = ig2sparse(G)
+
+num_moments = 300
+num_vecs = 200
 extra_points = 10
-ek_laplacian, rho_laplacian = pykpm(L_sparse, num_moments, num_vecs, extra_points)
+ek, rho = pykpm(W, num_moments, num_vecs, extra_points)
 ```
+
+```python
+import matplotlib.pyplot as plt
+plt.hist(vals, density=True, bins=100, alpha=.9, color="steelblue")
+plt.scatter(ek, rho, c="tomato", zorder=999, alpha=0.9, marker="d")
+
+```
+
+![](docs/imgs/kpm.png)
 
 ## Stochastic Lanczos Quadrature (SLQ)
 
@@ -58,6 +68,41 @@ The above code returns
 
 ```
 (3058.012, 3063.16457163222)
+```
+#### Entropy
+```python
+import scipy
+import scipy.sparse
+
+def entropy(eig_vals):
+  s = 0.
+  for val in eig_vals:
+    if val > 0:
+      s += -val*np.log(val)
+  return s
+
+L = np.array(G.laplacian(normalized=True), dtype=np.float64)
+vals_laplacian = np.linalg.eigvalsh(L).real
+
+exact_entropy =  entropy(vals_laplacian)
+
+
+def trace_function(eig_vals):
+  def entropy(val):
+    return tf.cond(val>0, lambda:-val*tf.log(val), lambda: 0.)
+  
+  return tf.map_fn(entropy, eig_vals)
+ 
+L_sparse = scipy.sparse.coo_matrix(L)
+    
+num_vecs = 100
+num_steps = 50
+approximated_entropy, _ = pyslq(L_sparse, num_vecs, num_steps,  trace_function)
+
+approximated_entropy, exact_entropy
+```
+```
+(-509.46283, -512.5283224633046)
 ```
 [[1] Hutchinson, M. F. (1990). A stochastic estimator of the trace of the influence matrix for laplacian smoothing splines. Communications in Statistics-Simulation and Computation, 19(2), 433-450.](https://www.tandfonline.com/doi/abs/10.1080/03610919008812866)
 
