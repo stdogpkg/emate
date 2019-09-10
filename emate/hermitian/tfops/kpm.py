@@ -17,11 +17,6 @@ Applications
 Available functions
 -------------------
 
-kpm
-
-get_moments:
-
-apply_kernel
 
 """
 import numpy as np
