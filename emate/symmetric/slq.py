@@ -29,7 +29,34 @@ def pyslq(
     infer_shape=False,
     device='/gpu:0',
 ):
+    """Sthocastic Lanczos Quadrature
+    
+    .. math::
 
+      \mathrm{tr}\exp(L) = \sum\limits_{i=0}^{|V|} e^{\lambda_i}
+
+    Parameters
+    ----------
+        L: sparse matrix
+        num_vecs: int
+            Number of  random vectors used to approximate the trace
+            using the Hutchison's trick [1]
+        num_steps: int
+            Number of Lanczos steps or Chebyschev's moments
+        device: str
+            "/cpu:int" our "/gpu:int"
+    
+    Returns
+    -------
+        approximated_estrada_index: float
+
+    References
+    ----------
+
+    .. [1]Ubaru, S., Chen, J., & Saad, Y. (2017).
+        Fast Estimation of tr(f(A)) via Stochastic Lanczos Quadrature. 
+        SIAM Journal on Matrix Analysis and Applications, 38(4), 1075-1099.
+    """
     coo = A.tocoo()
 
     if precision == 32:
