@@ -17,12 +17,6 @@ Applications
 Available functions
 -------------------
 
-kpm
-
-get_moments:
-
-apply_kernel
-
 """
 import numpy as np
 import tensorflow as tf
@@ -51,10 +45,11 @@ def pykpm(
     Parameters
     ----------
 
-        tf_float: (tensorflow float type)
+        H: (tensorflow float type)
             valids values are tf.float32, tf.float64, or tf.float128
-        name_scope: (str) (default="get_jackson_kernel")
-            scope name for tensorflow
+        num_moments: (str)
+        num_vecs: (int)
+        extra_points: (int)
 
     Return
     ------
