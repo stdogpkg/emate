@@ -4,19 +4,31 @@ Kernel Polynomial Method
 
 The kernel polynomial method is an algorithm to obtain an approximation
 for the spectral density of a Hermitian matrix. This algorithm combines
-expansion in polynomials of Chebyshev with the stochastic trace in order
-to obtain such approximation.
+expansion in polynomials of Chebyshev [1], the stochastic trace [2] and a
+kernel smothing techinique  in order to obtain the approximation for the 
+spectral density
 
 Applications
 ------------
 
-    - Hamiltonian matrices associated with quantum mechanics
-    - Magnetic Laplacian associated with directed graphs
-    - etc
+- Hamiltonian matrices associated with quantum mechanics
+- Laplacian matrix associated with a graph
+- Magnetic Laplacian associated with directed graphs
+- etc
 
-Available functions
--------------------
 
+References
+----------
+
+[1] Wang, L.W., 1994. Calculating the density of states and
+optical-absorption spectra of large quantum systems by the plane-wave moments
+method. Physical Review B, 49(15), p.10154.
+
+[2] Hutchinson, M.F., 1990. A stochastic estimator of the trace of the
+influence matrix for laplacian smoothing splines. Communications in
+Statistics-Simulation and Computation, 19(2), pp.433-450.
+
+=======
 """
 import numpy as np
 import tensorflow as tf
@@ -42,20 +54,49 @@ def pykpm(
     swap_memory_while=False,
 ):
     """
+    Kernel Polynomial Method using a Jackson's kernel. 
+
     Parameters
     ----------
 
-        H: (tensorflow float type)
-            valids values are tf.float32, tf.float64, or tf.float128
-        num_moments: (str)
-        num_vecs: (int)
-        extra_points: (int)
+        H: scipy sparse matrix
+            The Hermitian matrix
+        num_moments: int 
+        num_vecs: int
+            Number of random vectors in oder to aproximate the 
+            trace
+        extra_points: int
+        precision: int 
+            Single or double precision
+        limin: float, optional
+            The smallest eigenvalue
+        lmax: float
+            The highest eigenvalue
+        epsilon: float
+            Used to rescale the matrix eigenvalues into the interval
+            [-1, 1]
+    
+    Returns
+    -------
 
-    Return
-    ------
+        ek: array of floats 
+            An array with num_moments + extra_points approximated
+            "eigenvalues"
 
-    Note
-    ----
+        rho: array of floats
+            An array containing the densities of each "eigenvalue"
+
+    References
+    ----------
+
+        [1] Wang, L.W., 1994. Calculating the density of states and
+        optical-absorption spectra of large quantum systems by the plane-wave moments
+        method. Physical Review B, 49(15), p.10154.
+
+        [2] Hutchinson, M.F., 1990. A stochastic estimator of the trace of the
+        influence matrix for laplacian smoothing splines. Communications in
+        Statistics-Simulation and Computation, 19(2), pp.433-450.
+
 
     """
 
