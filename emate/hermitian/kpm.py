@@ -28,6 +28,7 @@ method. Physical Review B, 49(15), p.10154.
 influence matrix for laplacian smoothing splines. Communications in
 Statistics-Simulation and Computation, 19(2), pp.433-450.
 
+=======
 """
 import numpy as np
 import tensorflow as tf
