@@ -44,7 +44,7 @@ plt.scatter(ek, rho, c="tomato", zorder=999, alpha=0.9, marker="d")
 
 ```
 
-![](docs/imgs/kpm.png)
+![](docs/source/imgs/kpm.png)
 
 ## Stochastic Lanczos Quadrature (SLQ)
 
