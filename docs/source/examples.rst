@@ -6,9 +6,8 @@ Kernel Polynomial Method (Chebyshev Polynomial expansion)
 =========================================================
 
 
-
 The Kernel Polynomial Method can estimate the spectral density of large
-sparse Hermitan matrices with a computational cost almost linear. This method
+sparse Hermitan matrices with a low computational cost. This method
 combines three key ingredients: the Chebyshev expansion + the stochastic
 trace estimator + kernel smoothing.
 
@@ -46,6 +45,19 @@ trace estimator + kernel smoothing.
 
 
 .. image:: imgs/kpm.png
+
+References
+----------
+
+    [1] Wang, L.W., 1994. Calculating the density of states and
+    optical-absorption spectra of large quantum systems by the plane-wave moments
+    method. Physical Review B, 49(15), p.10154.
+
+    [2] Hutchinson, M.F., 1990. A stochastic estimator of the trace of the
+    influence matrix for laplacian smoothing splines. Communications in
+    Statistics-Simulation and Computation, 19(2), pp.433-450.
+
+
 
 Sthocastic Lanczos Quadrature
 =============================
@@ -103,7 +115,7 @@ The above code returns
     (3058.012, 3063.16457163222)
 
 References
-==========
+----------
 
     1 - Ubaru, S., Chen, J., & Saad, Y. (2017). Fast Estimation of tr(f(A)) via Stochastic Lanczos Quadrature. 
     SIAM Journal on Matrix Analysis and Applications, 38(4), 1075-1099.

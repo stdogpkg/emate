@@ -1,16 +1,3 @@
-"""
-Lanczos
-=======
-
-
-Available methods
------------------
-
-trace_estimator
-
-
-"""
-
 import tensorflow as tf
 import numpy as np
 
@@ -31,31 +18,6 @@ def trace_estimator(
     infer_shape=False,
     name_scope=None
 ):
-    """
-
-    This function estimate the trace of a given matrix function (trace_function)
-    through stochastic Lanczos quadrature. Read more in
-    .. _Fast Estimation of $tr(f(A))$ via Stochastic Lanczos Quadrature:
-        https://epubs.siam.org/doi/abs/10.1137/16M1104974
-
-    Parameters
-    ----------
-        A,
-        dimension,
-        num_vecs,
-        num_steps,
-        trace_function,
-        random_factory=radamacher,
-        parallel_iterations=10,
-        swap_memory=False,
-        infer_shape=False,
-        name_scope: (str)(default="replace_by_indices")
-            scope name for tensorflow
-
-    Returns
-    -------
-        output_matrix: Tensor(shape=(dimension, dimension), dtype=tf_type)
-    """
     tf_type = A.dtype
     with tf.name_scope("Trace_Estimator"):
         with tf.name_scope("init_vars"):
