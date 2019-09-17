@@ -81,7 +81,7 @@ a procedure proposed in the work made by Ubaru, S. et.al. [1] (you need to cite 
 
 
 Estrada Index
-^^^^^^^^^^^^^^^^
+-------------
 
 .. code-block:: python
 

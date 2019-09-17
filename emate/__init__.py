@@ -3,7 +3,7 @@ from emate import symmetric
 
 from emate import linalg
 from emate import utils
-__version__ = "1.0.2"
+__version__ = "1.0.3"
 __license__ = ""
 __author__ = "Bruno Messias; Thomas K Peron"
 __author_email__ = "messias.physics@gmail.com"
