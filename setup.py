@@ -10,13 +10,13 @@ setup(
     packages=find_packages(exclude=["build", ]),
     long_description=README_TEXT,
     long_description_content_type="text/markdown",
-    install_requires=["tensorflow", "scipy", "numpy"],
+    install_requires=["tensorflow==1.13.2", "scipy", "numpy"],
     include_package_data=True,
     license="MIT",
     description="",
     author_email="messias.physics@gmail.com",
     author="Bruno Messias; Thomas K Peron",
-    download_url="https://github.com/stdogpkg/emate/archive/v1.0.3.tar.gz",
+    download_url="https://github.com/stdogpkg/emate/archive/v1.0.4.tar.gz",
     keywords=[
         "gpu", "science", "complex-networks", "graphs", "matrices", "kpm",
          "tensorflow", "chebyshev", "spectral", "eigenvalues"
