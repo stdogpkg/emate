@@ -1,3 +1,4 @@
+---
 title: 'eMaTe a python package to efficienty estimate spectra and spectral functions of sparse matrices'
 tags:
   - Python
@@ -5,73 +6,35 @@ tags:
   - graphs
   - complex networks
 authors:
-  - name:Bruno Messias F. Resende^[messias.physics@gmail.com]
-    orcid: 0000-0003-0872-7098
+  - name:Bruno Messias F. Resende^[messias.physics at gmail.com]
+    orcid: 0000-0002-7614-1462
     affiliation: "1" 
 affiliations:
  - name: Institute of physics of São Carlos, SP
    index: 1
-date: 13 August 2017
+date: 01 July 2020
 bibliography: paper.bib
 
-# Optional fields if submitting to a AAS journal too, see this blog post:
-# https://blog.joss.theoj.org/2018/12/a-new-collaboration-with-aas-publishing
-aas-doi: 10.3847/xxxxx <- update this with the DOI from AAS once you know it.
-aas-journal: Astrophysical Journal <- The name of the AAS journal.
+
 ---
 
 # Summary
 
-The problem of estimating the spectra of sparse matrices and the functions associated appears in a myriad of applications. From social network characterization 
+Sparse matrices can represent several phenomena and theoretical structures, from social networks to quantum systems. Therefore, having technical tools capable of extracting information about these kinds of matrices it is essential. One of the most important information about matrices are that related with the spectra of the matrices and functions associated. For example, the spectral proprieties are strongly related with dynamical proprieties occurring in complex networks, can compare graphs and estimating quantum density to just name a few. However, the algorithms to calculate this spectral proprieties has $\mathcal O(n^3)$ complexity, where $n$ it is the size of the matrix. Therefore, having a friendly package which allow this spectral information to be estimated in an efficient way can be helpfully.
+
+The `eMaTe` is an Python package for estimating proprieties of sparse matrices using stochastic approaches using GPU or CPU. The stochastic approach can reduce the computational complexity for almost linear, allowing to estimate the spectral proprieties of large matrices. Until now, `eMaTe` has two main algorithms implemented. The Kernel Polynomial Method (KPM) and the Stochastic Lanczos Quadrature (SLQ). The first can estimate spectral density, functions and trace functions of any Hermitian matrices. The second method was recently proposed to estimate efficiently and in accurate form trace functions from symmetric sparse matrices. We can directly apply both methods in the field of undirected graphs (a.k.a. undirected networks), recently has showed how to use this method in directed graphs... 
 
 
-The forces on stars, galaxies, and dark matter under external gravitational
-fields lead to the dynamical evolution of structures in the universe. The orbits
-of these bodies are therefore key to understanding the formation, history, and
-future state of galaxies. The field of "galactic dynamics," which aims to model
-the gravitating components of galaxies to study their structure and evolution,
-is now well-established, commonly taught, and frequently used in astronomy.
-Aside from toy problems and demonstrations, the majority of problems require
-efficient numerical tools, many of which require the same base code (e.g., for
-performing numerical orbit integration).
-
-`Gala` is an Astropy-affiliated Python package for galactic dynamics. Python
-enables wrapping low-level languages (e.g., C) for speed without losing
-flexibility or ease-of-use in the user-interface. The API for `Gala` was
-designed to provide a class-based and user-friendly interface to fast (C or
-Cython-optimized) implementations of common operations such as gravitational
-potential and force evaluation, orbit integration, dynamical transformations,
-and chaos indicators for nonlinear dynamics. `Gala` also relies heavily on and
-interfaces well with the implementations of physical units and astronomical
-coordinate systems in the `Astropy` package [@astropy] (`astropy.units` and
-`astropy.coordinates`).
-
-`Gala` was designed to be used by both astronomical researchers and by
-students in courses on gravitational dynamics or astronomy. It has already been
-used in a number of scientific publications [@Pearson:2017] and has also been
-used in graduate courses on Galactic dynamics to, e.g., provide interactive
-visualizations of textbook material [@Binney:2008]. The combination of speed,
-design, and support for Astropy functionality in `Gala` will enable exciting
-scientific explorations of forthcoming data releases from the *Gaia* mission
-[@gaia] by students and experts alike.
 
 # Mathematics
 
-Single dollars ($) are required for inline mathematics e.g. $f(x) = e^{\pi/x}$
+The theory of sthocastic estimation of sparse matrices it is realy heavily. Therefore, we will not  discuss that here. The reader interessed in that should consulte ... for the KPM method, and ... for SLQ method. To understand the powerfully sthocastic trace estimator and  the parameters used in both methods see ....
 
-Double dollars make self-standing equations:
 
-$$\Theta(x) = \left\{\begin{array}{l}
-0\textrm{ if } x < 0\cr
-1\textrm{ else}
-\end{array}\right.$$
 
-You can also use plain \LaTeX for equations
-\begin{equation}\label{eq:fourier}
-\hat f(\omega) = \int_{-\infty}^{\infty} f(x) e^{i\omega x} dx
-\end{equation}
-and refer to \autoref{eq:fourier} from text.
+# Examples
 
+The theory of sthocastic estimation of sparse matrices it is realy heavily. Therefore, we will not  discuss that here. The reader interessed in that should consulte ... for the KPM method, and ... for SLQ method. To understand the powerfully sthocastic trace estimator and  the parameters used in both methods see ....
 # Citations
 
 Citations to entries in paper.bib should be in
@@ -100,7 +63,6 @@ for n in range(10):
 
 # Acknowledgements
 
-We acknowledge contributions from Brigitta Sipocz, Syrtis Major, and Semyeong
-Oh, and support from Kathryn Johnston during the genesis of this project.
+...
 
 # References
