@@ -33,7 +33,8 @@ Statistics-Simulation and Computation, 19(2), pp.433-450.
 import numpy as np
 import tensorflow as tf
 
-from emate.linalg import rescale_matrix, rescale_cupy
+from emate.linalg import rescale_matrix
+from emate.linalg.misc import rescale_cupy
 
 from emate.utils.tfops.vector_factories import normal_complex
 
