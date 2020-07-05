@@ -41,7 +41,7 @@ from emate.utils.tfops.kernels import jackson as tf_jackson
 from emate.utils.cupyops.kernels import jackson as cupy_jackson
 
 from emate.hermitian.tfops.kpm import get_moments, apply_kernel
-from emate.hermitian.cupyops import kpm as ops_cupykpm
+from emate.hermitian.cupyops import kpm as cupyops
 
 
 def rescale_kpm(ek, rho, scale_fact_a, scale_fact_b):
@@ -173,7 +173,7 @@ def pykpm(
 
     return ek, rho
 
-def cukpm(
+def cupykpm(
     H,
     num_moments=10,
     num_vecs=10,
@@ -198,12 +198,12 @@ def cukpm(
     H, scale_fact_a, scale_fact_b = rescale_cupy(H, lmin, lmax, epsilon)
     
     moments = cp.array([
-        ops_cupykpm.get_moments(H, num_moments, dimension)
+        cupyops.get_moments(H, num_moments, dimension)
         for i in range(num_vecs)
     ])
     kernel0 = cupy_jackson(num_moments, precision=32)
  
-    ek, rho = ops_cupykpm.apply_kernel(
+    ek, rho = cupyops.apply_kernel(
         moments,
         kernel0,
         dimension,
@@ -217,4 +217,4 @@ def cukpm(
     return rho, ek
 
 tfkpm = pykpm
-__all__ = ["pykpm", "cukpm", "tfkpm"]
+__all__ = ["pykpm", "cupykpm", "tfkpm"]
