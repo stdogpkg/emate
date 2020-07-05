@@ -1,3 +1,3 @@
 from emate.utils import tfops
-
-__all__ = ["tfops"]
+from emate.utils import cupyops
+__all__ = ["tfops", "cupyops"]

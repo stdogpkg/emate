@@ -10,7 +10,7 @@ rescale_matrix
 """
 import scipy
 import scipy.sparse.linalg
-
+import cupy as cp
 
 def get_bounds(
     H,
@@ -104,5 +104,23 @@ are in the range $[-1, 1]$.
 
     return H_rescaled, scale_fact_a, scale_fact_b
 
+def rescale_cupy(
+    H,
+    lmin=None,
+    lmax=None,
+    epsilon=0.01
+):
+    n_vertices = H.shape[0]
+    if (lmin is None) or (lmax is None):
+        lmin, lmax = get_bounds(H)
 
-__all__ = ["get_bounds", "rescale_matrix"]
+    scale_fact_a = (lmax - lmin) / (2. - epsilon)
+    scale_fact_b = (lmax + lmin) / 2
+
+    a = (lmax - lmin) / (2-epsilon)
+    b = (lmax + lmin) / 2
+    H_rescaled = (1/a)*(H - b*cp.sparse.eye(n_vertices))
+
+    return H_rescaled, a, b
+
+__all__ = ["get_bounds", "rescale_matrix", "rescale_cupy"]
