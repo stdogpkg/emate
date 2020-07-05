@@ -32,6 +32,7 @@ Statistics-Simulation and Computation, 19(2), pp.433-450.
 """
 import numpy as np
 import tensorflow as tf
+import cupy as cp
 
 from emate.linalg import rescale_matrix
 from emate.linalg.misc import rescale_cupy
