@@ -12,6 +12,7 @@ import scipy
 import scipy.sparse.linalg
 import cupy as cp
 
+
 def get_bounds(
     H,
     M=None,
@@ -111,9 +112,10 @@ def rescale_cupy(
     epsilon=0.01
 ):
     n_vertices = H.shape[0]
+
     if (lmin is None) or (lmax is None):
         lmin, lmax = get_bounds(H)
-
+        
     scale_fact_a = (lmax - lmin) / (2. - epsilon)
     scale_fact_b = (lmax + lmin) / 2
 

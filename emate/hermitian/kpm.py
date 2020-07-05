@@ -34,7 +34,7 @@ import numpy as np
 import tensorflow as tf
 import cupy as cp
 
-from emate.linalg import rescale_matrix
+from emate.linalg import rescale_matrix, get_bounds
 from emate.linalg.misc import rescale_cupy
 
 from emate.utils.tfops.vector_factories import normal_complex
@@ -110,6 +110,9 @@ def pykpm(
 
 
     """
+
+    if (lmin is None) or (lmax is None):
+        lmin, lmax = get_bounds(H)
 
     H, scale_fact_a, scale_fact_b = rescale_matrix(H, lmin, lmax,)
 
@@ -188,6 +191,9 @@ def cupykpm(
 
     dimension = H.shape[0]
 
+    if (lmin is None) or (lmax is None):
+        lmin, lmax = get_bounds(H)
+
     H  = cp.sparse.csr_matrix(
         (
             cp.array(H.data.astype("complex64")), 
@@ -214,7 +220,6 @@ def cupykpm(
         extra_points
     )
     ek, rho = rescale_kpm(ek, rho, scale_fact_a, scale_fact_b)
-
 
     return rho, ek
 
