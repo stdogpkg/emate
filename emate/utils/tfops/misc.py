@@ -37,15 +37,15 @@ def sparse_tensor_dense_matmul_gpu(
     ab_are_real = sp_a_is_complex is False and b_is_complex is False
 
     if ab_are_real or force_gpu is False:
-        result = tf.sparse_tensor_dense_matmul(sp_a, b, adjoint_a, adjoint_b)
+        result = tf.sparse.sparse_dense_matmul(sp_a, b, adjoint_a, adjoint_b)
 
     elif sp_a_is_complex is False and b_is_complex:
         real_b = tf.math.real(b)
         imag_b = tf.math.imag(b)
 
-        imag = tf.sparse_tensor_dense_matmul(sp_a, imag_b, adjoint_a,
+        imag = tf.sparse.sparse_dense_matmul(sp_a, imag_b, adjoint_a,
             adjoint_b)
-        real = tf.sparse_tensor_dense_matmul(sp_a, real_b, adjoint_a,
+        real = tf.sparse.sparse_dense_matmul(sp_a, real_b, adjoint_a,
             adjoint_b)
 
         result = tf.add(
@@ -56,9 +56,9 @@ def sparse_tensor_dense_matmul_gpu(
     elif b_is_complex is False and sp_a_is_complex:
         real_a, imag_a = break_sparse_tensor(sp_a)
 
-        imag = tf.sparse_tensor_dense_matmul(imag_a, b, adjoint_a,
+        imag = tf.sparse.sparse_dense_matmul(imag_a, b, adjoint_a,
             adjoint_b)
-        real = tf.sparse_tensor_dense_matmul(real_a, b, adjoint_a,
+        real = tf.sparse.sparse_dense_matmul(real_a, b, adjoint_a,
             adjoint_b)
 
         result = tf.add(
@@ -74,17 +74,17 @@ def sparse_tensor_dense_matmul_gpu(
 
         #pure imaginary
 
-        imag_a_real_b = tf.sparse_tensor_dense_matmul(imag_a, real_b, adjoint_a,
+        imag_a_real_b = tf.sparse.sparse_dense_matmul(imag_a, real_b, adjoint_a,
             adjoint_b)
-        real_a_imag_b = tf.sparse_tensor_dense_matmul(real_a, imag_b, adjoint_a,
+        real_a_imag_b = tf.sparse.sparse_dense_matmul(real_a, imag_b, adjoint_a,
             adjoint_b)
         imag = tf.add(imag_a_real_b, real_a_imag_b)
 
         # real
-        real_a_real_b = tf.sparse_tensor_dense_matmul(real_a, real_b, adjoint_a,
+        real_a_real_b = tf.sparse.sparse_dense_matmul(real_a, real_b, adjoint_a,
             adjoint_b)
 
-        imag_a_imag_b = tf.sparse_tensor_dense_matmul(imag_a, imag_b, adjoint_a,
+        imag_a_imag_b = tf.sparse.sparse_dense_matmul(imag_a, imag_b, adjoint_a,
             adjoint_b)
         real = tf.subtract(real_a_real_b, imag_a_imag_b )
 
@@ -130,11 +130,11 @@ def replace_by_indices(input_matrix, values, indices, name_scope=None):
             dense_shape=tf.shape(input_matrix, out_type=tf.int64)
         )
 
-        # tf.sparse_tensor_dense_matmul(.., I) can be replaced by
+        # tf.sparse.sparse_dense_matmul(.., I) can be replaced by
         # tf.sparse.to_dense. However, the last has no GPU suport until now
         mask_values = tf.add(
             ones,
-            tf.sparse_tensor_dense_matmul(
+            tf.sparse.sparse_dense_matmul(
                     mask_sparse_tensor_ones,
                     identity_matrix
                 )
@@ -152,7 +152,7 @@ def replace_by_indices(input_matrix, values, indices, name_scope=None):
         )
         output_matrix = tf.add(
             masked_input_tensor,
-            tf.sparse_tensor_dense_matmul(
+            tf.sparse.sparse_dense_matmul(
                 values_sparse_tensor,
                 identity_matrix
             )

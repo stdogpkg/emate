@@ -23,7 +23,7 @@ def trace_estimator(
         with tf.name_scope("init_vars"):
             nv = tf.constant(num_vecs, dtype=tf_type, name="nv")
             n = tf.constant(dimension, dtype=tf_type, name="n")
-            factor = tf.divide(n, nv, "n/nv")
+            factor = tf.math.dividen, nv, "n/nv")
         with tf.name_scope("sthocastic_step"):
             def sthocastic_step(i_step):
                 with tf.name_scope("init_vars"):

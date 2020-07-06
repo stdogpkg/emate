@@ -78,7 +78,7 @@ def radamacher(shape, norm=True, precision=32, name_scope=None):
     with tf.name_scope("radamacher_factory", name_scope):
         vec = tf.sign(tf.random.normal(shape, dtype=tf_float))
         if norm:
-            vec = tf.divide(vec, tf.norm(vec))
+            vec = tf.math.dividevec, tf.norm(vec))
         return vec
 
 
