@@ -142,10 +142,10 @@ def pykpm(
 
     dimension = H.shape[0]
 
-    tf.reset_default_graph()
+    tf.compat.v1.reset_default_graph()
     with tf.device(device):
-        sp_indices = tf.placeholder(dtype=tf.int64, name="sp_indices")
-        sp_values = tf.placeholder(
+        sp_indices = tf.compat.v1.placeholder(dtype=tf.int64, name="sp_indices")
+        sp_values = tf.compat.v1.placeholder(
             dtype=tf_type,
             name="sp_values"
         )
@@ -173,7 +173,7 @@ def pykpm(
         )
         ek, rho = rescale_kpm(ek, rho, scale_fact_a, scale_fact_b)
 
-    with tf.Session() as sess:
+    with tf.compat.v1.Session() as sess:
         ek, rho = sess.run([ek, rho], feed_dict)
 
     return ek, rho
@@ -221,7 +221,7 @@ def cupykpm(
     )
     ek, rho = rescale_kpm(ek, rho, scale_fact_a, scale_fact_b)
 
-    return rho, ek
+    return ek, rho
 
 tfkpm = pykpm
 __all__ = ["pykpm", "cupykpm", "tfkpm"]

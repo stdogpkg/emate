@@ -69,7 +69,7 @@ def get_moments(
 
         # first_moment.shape = (num_vecs, )
         if complex_eval:
-            alpha0conj = tf.conj(alpha0)
+            alpha0conj = tf.math.conj(alpha0)
         else:
             alpha0conj = alpha0
 
@@ -128,8 +128,8 @@ def get_moments(
             alpha2 = matrix_mul-alpha0
 
             if complex_eval:
-                alpha1conj = tf.conj(alpha1)
-                alpha2conj = tf.conj(alpha2)
+                alpha1conj = tf.math.conj(alpha1)
+                alpha2conj = tf.math.conj(alpha2)
 
             else:
                 alpha1conj = alpha1
@@ -256,13 +256,13 @@ def apply_kernel(
         num_points = num_moments+extra_points
 
         smooth_moments = tf.reshape(smooth_moments, [num_points])
-        smooth_moments = tf.spectral.dct(smooth_moments, type=3)
+        smooth_moments = tf.signal.dct(smooth_moments, type=3)
 
         points = tf.range(num_points, dtype=tf.float32)
 
         ek = tf.cos(np.pi*(points+0.5)/(num_points))
         gk = np.pi*tf.sqrt(1.-ek**2)
-        rho = tf.divide(smooth_moments, gk)
+        rho = tf.math.divide(smooth_moments, gk)
 
     return ek, rho
 
