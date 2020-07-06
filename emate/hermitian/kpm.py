@@ -221,7 +221,7 @@ def cupykpm(
     )
     ek, rho = rescale_kpm(ek, rho, scale_fact_a, scale_fact_b)
 
-    return rho, ek
+    return ek, rho
 
 tfkpm = pykpm
 __all__ = ["pykpm", "cupykpm", "tfkpm"]
