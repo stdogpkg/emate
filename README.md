@@ -1,6 +1,6 @@
 # ![eMaTe](emate.png)
 
-eMaTe is a python package implemented in tensorflow which the main goal is provide useful methods capable of estimate spectral densities and trace functions of large sparse matrices. 
+eMaTe it is a python package which the main goal is to provide  methods capable of estimating the spectral densities and trace functions of large sparse matrices. 
 
 ## Install                                                                                                              
 ```
@@ -26,15 +26,15 @@ vals = np.linalg.eigvalsh(W).real
 ```
 
 ```python
-from emate.hermitian import pykpm
+from emate.hermitian import tfkpm
 from stdog.utils.misc import ig2sparse 
 
 W = ig2sparse(G)
 
-num_moments = 300
-num_vecs = 200
+num_moments = 100
+num_vecs = 100
 extra_points = 10
-ek, rho = pykpm(W, num_moments, num_vecs, extra_points)
+ek, rho = tfkpm(W, num_moments, num_vecs, extra_points)
 ```
 
 ```python
@@ -43,6 +43,21 @@ plt.hist(vals, density=True, bins=100, alpha=.9, color="steelblue")
 plt.scatter(ek, rho, c="tomato", zorder=999, alpha=0.9, marker="d")
 
 ```
+If the CUPY pkg it is available in your machine you also can use the cupy implementation.  When compared with the tf-kpm the 
+The cupy-kpm it's more slow for median matrices and more faster for larger matrices
+
+If the CUPY package it is available in your machine, you can also use the cupy implementation. When compared to tf-kpm, the
+Cupy-kpm is slower for median matrices (100k) and faster for larger matrices (> 10^6). The main reason it's because the tf-kpm was implemented in order to calc all te moments in a single step. 
+
+```python
+from emate.hermitian import cupykpm
+
+num_moments = 100
+num_vecs = 100
+extra_points = 10
+ek, rho = cupykpm(W, num_moments, num_vecs, extra_points)
+```
+
 
 ![](docs/source/imgs/kpm.png)
 
