@@ -12,7 +12,10 @@ Available methods
     - jackson
 """
 
-import cupy as cp
+try:
+    import cupy as cp
+except:
+    cp = None
 
 
 def jackson(

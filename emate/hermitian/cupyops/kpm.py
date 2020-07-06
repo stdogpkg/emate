@@ -20,7 +20,11 @@ Available functions
 
 """
 import numpy as np
-import cupy as cp
+try:
+    import cupy as cp
+except:
+    cp = None
+
 from emate.utils.cupyops.signal import dctIII
 
 
@@ -28,7 +32,7 @@ def get_moments(
     H_rescaled,
     num_moments,
     dimension,
-    cp_complex=cp.complex64
+    precision=32
 ):
     """
     Parameters
@@ -44,7 +48,10 @@ def get_moments(
     Returns
     -------
     """
-
+    cp_complex = cp.complex64
+    if precision == 64:
+        cp_complex = cp.complex128
+        
     alpha0 = cp.exp(1j*2*cp.pi*cp.random.rand(dimension))
     alpha1 = H_rescaled.dot(alpha0)
     mu = cp.zeros(num_moments, dtype=cp_complex)

@@ -32,7 +32,10 @@ Statistics-Simulation and Computation, 19(2), pp.433-450.
 """
 import numpy as np
 import tensorflow as tf
-import cupy as cp
+try:
+    import cupy as cp
+except:
+    cp = None
 
 from emate.linalg import rescale_matrix, get_bounds
 from emate.linalg.misc import rescale_cupy
@@ -206,10 +209,10 @@ def cupykpm(
     H, scale_fact_a, scale_fact_b = rescale_cupy(H, lmin, lmax, epsilon)
     
     moments = cp.array([
-        cupyops.get_moments(H, num_moments, dimension)
+        cupyops.get_moments(H, num_moments, dimension, precision=precision)
         for i in range(num_vecs)
     ])
-    kernel0 = cupy_jackson(num_moments, precision=32)
+    kernel0 = cupy_jackson(num_moments, precision=precision)
  
     ek, rho = cupyops.apply_kernel(
         moments,

@@ -10,7 +10,10 @@ rescale_matrix
 """
 import scipy
 import scipy.sparse.linalg
-import cupy as cp
+try:
+    import cupy as cp
+except:
+    cp = None
 
 
 def get_bounds(

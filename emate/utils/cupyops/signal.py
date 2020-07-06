@@ -11,8 +11,10 @@ Available methods
         Cosine transform of type III.
 """
 
-
-import cupy as cp
+try:
+    import cupy as cp
+except:
+    cp = None
 
 
 def dctIII(x, precision=32):
