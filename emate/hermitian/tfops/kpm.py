@@ -267,11 +267,4 @@ def apply_kernel(
     return ek, rho
 
 
-def rescale_kpm(ek, rho, scale_fact_a, scale_fact_b):
-
-    ek = ek*scale_fact_a + scale_fact_b
-    rho = rho/scale_fact_a
-    return ek, rho
-
-
-__all__ = ["rescale_kpm", "apply_kernel", "get_moments"]
+__all__ = [ "apply_kernel", "get_moments"]
