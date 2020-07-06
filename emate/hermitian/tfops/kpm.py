@@ -262,7 +262,7 @@ def apply_kernel(
 
         ek = tf.cos(np.pi*(points+0.5)/(num_points))
         gk = np.pi*tf.sqrt(1.-ek**2)
-        rho = tf.math.dividesmooth_moments, gk)
+        rho = tf.math.divide(smooth_moments, gk)
 
     return ek, rho
 

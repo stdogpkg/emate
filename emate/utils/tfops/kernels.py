@@ -54,7 +54,7 @@ def jackson(
         norm = np.pi/(num_moments+1)
         phases = kernel_moments*norm
 
-        kernel = tf.math.divide
+        kernel = tf.math.divide(
                 tf.add(
                     (num_moments-kernel_moments+1)*tf.cos(phases),
                     tf.sin(phases)/tf.tan(norm)
@@ -103,7 +103,7 @@ def lorentz(
         kernel_moments = tf.range(0, num_moments, dtype=tf_float)
         phases = 1. - kernel_moments/num_moments
 
-        kernel = tf.math.divide
+        kernel = tf.math.divide(
                 tf.sinh(l*phases),
                 tf.math.sinh(l)
             )
