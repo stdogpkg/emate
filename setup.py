@@ -74,7 +74,7 @@ with open("README.md", "r") as f:
 
 setup(
     name="emate",
-    version="v1.1.0",
+    version="v1.1.2",
     packages=find_packages(exclude=["build", ]),
     long_description=README_TEXT,
     long_description_content_type="text/markdown",
