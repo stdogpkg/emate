@@ -41,10 +41,6 @@ def get_moments(
         num_moments: (uint) number of cheby. moments
         dimension: (uint) size of the matrix
 
-        alpha0: Tensor(shape=(H.shape[0], num_vecs), dtype=tf_complex)
-        alpha1: Tensor(shape=(H.shape[0], num_vecs), dtype=tf_complex)
-
-
     Returns
     -------
     """
@@ -80,7 +76,8 @@ def apply_kernel(
     """
     Parameters
     ----------
-
+    Apply a given kernel in a given array of moments.
+    Return the cosine transform of type III.
     """
 
     moments = cp.sum(moments.real, axis=0)
