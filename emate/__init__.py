@@ -9,7 +9,7 @@ try:
 except:
     print("Warning: CUPy package not found")
 
-__version__ = "1.1.0"
+__version__ = "1.1.2"
 __license__ = "MIT"
 __author__ = "Bruno Messias; Thomas K Peron"
 __author_email__ = "messias.physics@gmail.com"
