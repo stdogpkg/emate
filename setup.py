@@ -4,7 +4,14 @@ import ctypes
 # to check pip version
 import pkg_resources 
 
+pipVersion = pkg_resources.require("pip")[0].version
+setuptoolsVersion = pkg_resources.require("setuptools")[0].version
 
+print("\n PIP Version", pipVersion, "\n")
+print("\n Setuptools Version", setuptoolsVersion, "\n")
+
+olderPip = pipVersion < "20.0"
+olderSetuptools = setuptoolsVersion < "45.0"
 
 def checkCUDAisAvailable():
     """
@@ -40,13 +47,7 @@ def getRequirements():
         conditionalRequirements: list
             A list of strings containing the pip pkgs.
     """
-    pipVersion = pkg_resources.require("pip")[0].version
-    setuptoolsVersion = pkg_resources.require("setuptools")[0].version
 
-    print("\n PIP Version", pipVersion, "\n")
-    print("\n Setuptools Version", setuptoolsVersion, "\n")
-
-    olderPip = pipVersion < "20.0"
  
     cudaLibsOk = checkCUDAisAvailable()   
     
@@ -55,11 +56,11 @@ def getRequirements():
         conditionalRequirements += ["tensorflow-gpu==1.15.3", ]
     else:
         print("\n CUDA it's not available in your machine.")
-        #print(" You won't be able to use the GPU support.\n")
-        #if olderPip:
-        #    tfRequirement = "tensorflow @ https://github.com/tensorflow/tensorflow/archive/v1.15.3.zip#egg=tensorflow-v1.15.3"
-        #else:
-        tfRequirement = "tensorflow==1.15.3"
+        print(" You won't be able to use the GPU support.\n")
+        if olderPip or olderSetuptools:
+            tfRequirement = "tensorflow==1.15.0"
+        else:
+            tfRequirement = "tensorflow==1.15.3"
     
     conditionalRequirements += [tfRequirement]
 
