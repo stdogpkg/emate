@@ -57,10 +57,10 @@ def getRequirements():
     else:
         print("\n CUDA it's not available in your machine.")
         print(" You won't be able to use the GPU support.\n")
-        if olderPip or olderSetuptools:
-            tfRequirement = "tensorflow==1.15.0"
-        else:
-            tfRequirement = "tensorflow==1.15.3"
+        #if olderPip or olderSetuptools:
+        #tfRequirement = "tensorflow==1.15.0"
+        #else:
+        tfRequirement = "tensorflow==1.15.3"
     
     conditionalRequirements += [tfRequirement]
 

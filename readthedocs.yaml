@@ -1,0 +1,7 @@
+version: 1
+
+python:
+   version: 3.7
+   install:
+      - requirements: requirements_docs.txt
+      - requirements: requirements_docs_sys.txt
