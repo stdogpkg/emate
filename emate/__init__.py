@@ -7,10 +7,10 @@ from emate import utils
 try:
     import cupy as cp
 except:
-    print("Warning: Cupy package not found")
+    print("Warning: CUPy package not found")
 
-__version__ = "1.0.4"
-__license__ = ""
+__version__ = "1.1.0"
+__license__ = "MIT"
 __author__ = "Bruno Messias; Thomas K Peron"
 __author_email__ = "messias.physics@gmail.com"
 __name__ = "eMaTe"
