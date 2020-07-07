@@ -60,7 +60,7 @@ setup(
     packages=find_packages(exclude=["build", ]),
     long_description=README_TEXT,
     long_description_content_type="text/markdown",
-    install_requires=["scipy", "numpy"],
+    install_requires=install_requires,
     include_package_data=True,
     license="MIT",
     description="""eMaTe can run in both CPU and GPU and can 
