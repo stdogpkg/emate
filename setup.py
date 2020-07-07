@@ -41,7 +41,11 @@ def getRequirements():
             A list of strings containing the pip pkgs.
     """
     pipVersion = pkg_resources.require("pip")[0].version
+    setuptoolsVersion = pkg_resources.require("setuptools")[0].version
+
     print("\n PIP Version", pipVersion, "\n")
+    print("\n Setuptools Version", setuptoolsVersion, "\n")
+
     olderPip = pipVersion < "20.0"
  
     cudaLibsOk = checkCUDAisAvailable()   
