@@ -14,26 +14,24 @@ trace estimator + kernel smoothing.
 
 .. code-block:: python
 
-    import igraph as ig
+    import networkx as nx
     import numpy as np
 
-    N = 3000
-    G = ig.Graph.Erdos_Renyi(N, 3/N)
+    n = 3000
+    g = nx.erdos_renyi_graph(n , 3/n)
+    W = nx.adjacency_matrix(g)
 
-    W = np.array(G.get_adjacency().data, dtype=np.float64)
-    vals = np.linalg.eigvalsh(W).real
+    vals  = np.linalg.eigvals(W.todense()).real
 
 .. code-block:: python
 
-    from emate.hermitian import pykpm
-    from stdog.utils.misc import ig2sparse 
+    from emate.hermitian import tfkpm
 
-    W = ig2sparse(G)
 
     num_moments = 300
     num_vecs = 200
     extra_points = 10
-    ek, rho = pykpm(W, num_moments, num_vecs, extra_points)
+    ek, rho = tfkpm(W, num_moments, num_vecs, extra_points)
 
 .. code-block:: python
 
@@ -87,11 +85,8 @@ Estrada Index
 
     import scipy
     import scipy.sparse
-    import igraph as ig
     import numpy as np
 
-    N = 3000
-    G = ig.Graph.Erdos_Renyi(N, 3/N) 
 
 .. code-block:: python
 

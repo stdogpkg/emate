@@ -17,21 +17,19 @@ The Kernel Polynomial Method can estimate the spectral density of large sparse 
 ### Example
 
 ```python
-import igraph as ig
+import networkx as nx
 import numpy as np
 
-N = 3000
-G = ig.Graph.Erdos_Renyi(N, 3/N)
+n = 3000
+g = nx.erdos_renyi_graph(n , 3/n)
+W = nx.adjacency_matrix(g)
 
-W = np.array(G.get_adjacency().data, dtype=np.float64)
-vals = np.linalg.eigvalsh(W).real
+vals  = np.linalg.eigvals(W.todense()).real
 ```
 
 ```python
 from emate.hermitian import tfkpm
-from stdog.utils.misc import ig2sparse 
 
-W = ig2sparse(G)
 
 num_moments = 40
 num_vecs = 40
@@ -54,7 +52,7 @@ from emate.hermitian import cupykpm
 num_moments = 40
 num_vecs = 40
 extra_points = 10
-ek, rho = cupykpm(W, num_moments, num_vecs, extra_points)
+ek, rho = cupykpm(W.tocsr(), num_moments, num_vecs, extra_points)
 ```
 
 
