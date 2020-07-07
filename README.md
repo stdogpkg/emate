@@ -7,6 +7,7 @@ eMaTe it is a python package which the main goal is to provide  methods capable 
 pip install emate
 ```
 
+If you a have a GPU you should also install cupy.
 ## Kernel Polynomial Method (KPM)
 
 The Kernel Polynomial Method can estimate the spectral density of large sparse Hermitan matrices with a computational cost almost linear. This method combines three key ingredients: the Chebyshev expansion + the stochastic trace estimator + kernel smoothing.
@@ -31,8 +32,8 @@ from stdog.utils.misc import ig2sparse
 
 W = ig2sparse(G)
 
-num_moments = 100
-num_vecs = 100
+num_moments = 40
+num_vecs = 40
 extra_points = 10
 ek, rho = tfkpm(W, num_moments, num_vecs, extra_points)
 ```
@@ -43,17 +44,14 @@ plt.hist(vals, density=True, bins=100, alpha=.9, color="steelblue")
 plt.scatter(ek, rho, c="tomato", zorder=999, alpha=0.9, marker="d")
 
 ```
-If the CUPY pkg it is available in your machine you also can use the cupy implementation.  When compared with the tf-kpm the 
-The cupy-kpm it's more slow for median matrices and more faster for larger matrices
-
 If the CUPY package it is available in your machine, you can also use the cupy implementation. When compared to tf-kpm, the
 Cupy-kpm is slower for median matrices (100k) and faster for larger matrices (> 10^6). The main reason it's because the tf-kpm was implemented in order to calc all te moments in a single step. 
 
 ```python
 from emate.hermitian import cupykpm
 
-num_moments = 100
-num_vecs = 100
+num_moments = 40
+num_vecs = 40
 extra_points = 10
 ek, rho = cupykpm(W, num_moments, num_vecs, extra_points)
 ```
