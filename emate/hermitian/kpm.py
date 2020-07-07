@@ -55,7 +55,7 @@ def rescale_kpm(ek, rho, scale_fact_a, scale_fact_b):
     rho = rho/scale_fact_a
     return ek, rho
 
-def pykpm(
+def tfkpm(
     H,
     num_moments=10,
     num_vecs=10,
@@ -89,6 +89,8 @@ def pykpm(
         epsilon: float
             Used to rescale the matrix eigenvalues into the interval
             [-1, 1]
+        device: str
+            '/gpu:ID' or '/cpu:ID' 
     
     Returns
     -------
@@ -99,18 +101,6 @@ def pykpm(
 
         rho: array of floats
             An array containing the densities of each "eigenvalue"
-
-    References
-    ----------
-
-        [1] Wang, L.W., 1994. Calculating the density of states and
-        optical-absorption spectra of large quantum systems by the plane-wave moments
-        method. Physical Review B, 49(15), p.10154.
-
-        [2] Hutchinson, M.F., 1990. A stochastic estimator of the trace of the
-        influence matrix for laplacian smoothing splines. Communications in
-        Statistics-Simulation and Computation, 19(2), pp.433-450.
-
 
     """
 
@@ -191,7 +181,41 @@ def cupykpm(
     lmax=None,
     epsilon=0.01
 ):
+    """
+    Kernel Polynomial Method using a Jackson's kernel. CUPY version
 
+    Parameters
+    ----------
+
+        H: scipy CSR sparse matrix
+            The Hermitian matrix 
+        num_moments: int 
+        num_vecs: int
+            Number of random vectors in oder to aproximate the 
+            trace
+        extra_points: int
+        precision: int 
+            Single or double precision
+        limin: float, optional
+            The smallest eigenvalue
+        lmax: float
+            The highest eigenvalue
+        epsilon: float
+            Used to rescale the matrix eigenvalues into the interval
+            [-1, 1]
+    
+    Returns
+    -------
+
+        ek: array of floats 
+            An array with num_moments + extra_points approximated
+            "eigenvalues"
+
+        rho: array of floats
+            An array containing the densities of each "eigenvalue"
+
+   
+    """
     dimension = H.shape[0]
 
     if (lmin is None) or (lmax is None):
@@ -226,5 +250,5 @@ def cupykpm(
 
     return ek, rho
 
-tfkpm = pykpm
+pykpm = tfkpm
 __all__ = ["pykpm", "cupykpm", "tfkpm"]
