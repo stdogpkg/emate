@@ -40,7 +40,7 @@ def lanczos_step(
     with tf.name_scope(name_scope, "lanczos_step"):
 
         w = tf.subtract(
-            tf.sparse_tensor_dense_matmul(A, v),
+            tf.sparse.sparse_dense_matmul(A, v),
             beta*vold,
             name="w"
         )

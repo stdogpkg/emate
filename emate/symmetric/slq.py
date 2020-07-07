@@ -111,10 +111,10 @@ def pyslq(
 
     dimension = A.shape[0]
 
-    tf.reset_default_graph()
+    tf.compat.v1.reset_default_graph()
     with tf.device(device):
-        sp_indices = tf.placeholder(dtype=tf.int64, name="sp_indices")
-        sp_values = tf.placeholder(
+        sp_indices = tf.compat.v1.placeholder(dtype=tf.int64, name="sp_indices")
+        sp_values = tf.compat.v1.placeholder(
             dtype=tf_type,
             name="sp_values"
         )
@@ -136,7 +136,7 @@ def pyslq(
             infer_shape
         )
 
-    with tf.Session() as sess:
+    with tf.compat.v1.Session() as sess:
         f_estimation, gammas = sess.run([f_estimation, gammas], feed_dict)
 
     return f_estimation, gammas
