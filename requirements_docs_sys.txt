@@ -1,0 +1,3 @@
+sphinx-gallery
+sphinxcontrib-napoleon
+setuptools==49.1.0
