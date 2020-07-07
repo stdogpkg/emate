@@ -1,6 +1,7 @@
 # ![eMaTe](emate.png)
 
-eMaTe it is a python package which the main goal is to provide  methods capable of estimating the spectral densities and trace functions of large sparse matrices. 
+eMaTe it is a python package which the main goal is to provide  methods capable of estimating the spectral densities and trace 
+functions of large sparse matrices. eMaTe can run in both CPU and GPU and can estimate the spectral density and related trace functions, such as entropy and Estrada index, even in directed or undirected networks with million of nodes.
 
 ## Install                                                                                                              
 ```
