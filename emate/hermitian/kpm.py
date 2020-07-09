@@ -217,6 +217,11 @@ def cupykpm(
    
     """
     dimension = H.shape[0]
+    cp_complex = cp.complex64
+    cp_real = cp.float32
+    if precision == 64:
+        cp_complex = cp.complex128
+        cp_real = cp.float64
 
     if (lmin is None) or (lmax is None):
         lmin, lmax = get_bounds(H)
@@ -232,16 +237,18 @@ def cupykpm(
 
     H, scale_fact_a, scale_fact_b = rescale_cupy(H, lmin, lmax, epsilon)
     
-    moments = cp.array([
-        cupyops.get_moments(H, num_moments, dimension, precision=precision)
-        for i in range(num_vecs)
-    ])
+    moments = cp.zeros(num_moments, dtype=cp_complex)
+    for _ in range(num_vecs):
+        moment = cupyops.get_moments(H, num_moments, dimension, precision=precision)
+        moments = moments + moment.real
+    
+    moments = moments/num_vecs/dimension
+
     kernel0 = cupy_jackson(num_moments, precision=precision)
  
     ek, rho = cupyops.apply_kernel(
         moments,
         kernel0,
-        dimension,
         num_moments,
         num_vecs,
         extra_points

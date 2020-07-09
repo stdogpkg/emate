@@ -68,7 +68,6 @@ def get_moments(
 def apply_kernel(
     moments,
     kernel,
-    dimension,
     num_moments,
     num_vecs,
     extra_points=1,
@@ -79,9 +78,6 @@ def apply_kernel(
     Apply a given kernel in a given array of moments.
     Return the cosine transform of type III.
     """
-
-    moments = cp.sum(moments.real, axis=0)
-    moments = moments/num_vecs/dimension
 
     num_points = extra_points+num_moments
 
