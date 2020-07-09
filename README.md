@@ -124,6 +124,10 @@ approximated_entropy, exact_entropy
 
 [[2] Ubaru, S., Chen, J., & Saad, Y. (2017). Fast Estimation of tr(f(A)) via Stochastic Lanczos Quadrature. SIAM Journal on Matrix Analysis and Applications, 38(4), 1075-1099.](https://epubs.siam.org/doi/abs/10.1137/16M1104974)
 
+[[3] The Kernel Polynomial Method applied to
+tight binding systems with
+time-dependence]()
+
 
  
 
