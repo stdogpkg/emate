@@ -47,12 +47,15 @@ If the CUPY package it is available in your machine, you can also use the cupy i
 Cupy-kpm is slower for median matrices (100k) and faster for larger matrices (> 10^6). The main reason it's because the tf-kpm was implemented in order to calc all te moments in a single step. 
 
 ```python
+import matplotlib.pyplot as plt
 from emate.hermitian import cupykpm
 
 num_moments = 40
 num_vecs = 40
 extra_points = 10
 ek, rho = cupykpm(W.tocsr(), num_moments, num_vecs, extra_points)
+plt.hist(vals, density=True, bins=100, alpha=.9, color="steelblue")
+plt.scatter(ek.get(), rho.get(), c="tomato", zorder=999, alpha=0.9, marker="d")
 ```
 
 
