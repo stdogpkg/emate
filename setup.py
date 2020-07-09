@@ -62,7 +62,7 @@ def getRequirements():
         #else:
         tfRequirement = "tensorflow==1.15.3"
     
-    conditionalRequirements += [tfRequirement]
+        conditionalRequirements += [tfRequirement]
 
     return conditionalRequirements
 
