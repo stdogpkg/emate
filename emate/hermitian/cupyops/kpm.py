@@ -45,10 +45,12 @@ def get_moments(
     -------
     """
     cp_complex = cp.complex64
+    cp_float = "float32"
     if precision == 64:
         cp_complex = cp.complex128
-        
-    alpha0 = cp.exp(1j*2*cp.pi*cp.random.rand(dimension))
+        cp_float = "float64"
+    print("cp complex", cp_complex)
+    alpha0 = cp.exp(1j*2*cp.pi*cp.random.rand(dimension,dtype=cp_complex))
     alpha1 = H_rescaled.dot(alpha0)
     mu = cp.zeros(num_moments, dtype=cp_complex)
     mu[0] = (alpha0.T.conj()).dot(alpha0)
@@ -71,6 +73,7 @@ def apply_kernel(
     num_moments,
     num_vecs,
     extra_points=1,
+    precision=32
 ):
     """
     Parameters
@@ -84,14 +87,14 @@ def apply_kernel(
     if kernel is not None:
         moments = moments*kernel
 
-    mu_ext = cp.zeros(num_points)
+    mu_ext = cp.zeros(num_points, dtype=moments.dtype)
     mu_ext[0:num_moments] = moments
 
-    smooth_moments = dctIII(mu_ext)
+    smooth_moments = dctIII(mu_ext, precision)
     points = cp.arange(0, num_points)
     ek = cp.cos(cp.pi*(points+0.5)/num_points)
     gk = cp.pi*cp.sqrt(1.-ek**2)
-   
+
     rho = cp.divide(smooth_moments, gk)
 
     return ek, rho

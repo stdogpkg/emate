@@ -20,7 +20,7 @@ except:
 def dctIII(x, precision=32):
     """
     That implements the cosine transform of type III.
-    Here, we are using the fact that  transformation it is just 
+    Here, we are using the fact that  transformation it is just
      the inverse of the cosine trasnform of type II.
 
     Args:
@@ -39,7 +39,7 @@ def dctIII(x, precision=32):
     N = x.shape[0]
     c = cp.empty(N+1, dtype=dtype)
 
-    phi = cp.exp(1j*cp.pi*cp.arange(N)/(2*N))
+    phi = cp.exp(1j*cp.pi*cp.arange(N, dtype=dtype)/(2*N))
     c[:N] = phi*x
     c[N] = 0.0
 
