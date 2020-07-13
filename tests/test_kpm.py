@@ -37,8 +37,8 @@ def calc_tfkpm(W, vals, kde):
     import tensorflow as tf
     print("\nTF version", tf.__version__, "\n")
 
-    num_moments = 40
-    num_vecs = 20
+    num_moments = 100
+    num_vecs = 100
     extra_points = 5
     ek, rho = emate.hermitian.tfkpm(
             W.tocsr().astype("complex64"), num_moments, num_vecs, extra_points,
