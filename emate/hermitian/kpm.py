@@ -5,7 +5,7 @@ Kernel Polynomial Method
 The kernel polynomial method is an algorithm to obtain an approximation
 for the spectral density of a Hermitian matrix. This algorithm combines
 expansion in polynomials of Chebyshev [1], the stochastic trace [2] and a
-kernel smothing techinique  in order to obtain the approximation for the 
+kernel smothing techinique  in order to obtain the approximation for the
 spectral density
 
 Applications
@@ -68,19 +68,19 @@ def tfkpm(
     swap_memory_while=False,
 ):
     """
-    Kernel Polynomial Method using a Jackson's kernel. 
+    Kernel Polynomial Method using a Jackson's kernel.
 
     Parameters
     ----------
 
         H: scipy sparse matrix
             The Hermitian matrix
-        num_moments: int 
+        num_moments: int
         num_vecs: int
-            Number of random vectors in oder to aproximate the 
+            Number of random vectors in oder to aproximate the
             trace
         extra_points: int
-        precision: int 
+        precision: int
             Single or double precision
         limin: float, optional
             The smallest eigenvalue
@@ -90,12 +90,12 @@ def tfkpm(
             Used to rescale the matrix eigenvalues into the interval
             [-1, 1]
         device: str
-            '/gpu:ID' or '/cpu:ID' 
-    
+            '/gpu:ID' or '/cpu:ID'
+
     Returns
     -------
 
-        ek: array of floats 
+        ek: array of floats
             An array with num_moments + extra_points approximated
             "eigenvalues"
 
@@ -188,13 +188,13 @@ def cupykpm(
     ----------
 
         H: scipy CSR sparse matrix
-            The Hermitian matrix 
-        num_moments: int 
+            The Hermitian matrix
+        num_moments: int
         num_vecs: int
-            Number of random vectors in oder to aproximate the 
+            Number of random vectors in oder to aproximate the
             trace
         extra_points: int
-        precision: int 
+        precision: int
             Single or double precision
         limin: float, optional
             The smallest eigenvalue
@@ -203,45 +203,52 @@ def cupykpm(
         epsilon: float
             Used to rescale the matrix eigenvalues into the interval
             [-1, 1]
-    
+
     Returns
     -------
 
-        ek: array of floats 
+        ek: array of floats
             An array with num_moments + extra_points approximated
             "eigenvalues"
 
         rho: array of floats
             An array containing the densities of each "eigenvalue"
 
-   
+
     """
     dimension = H.shape[0]
+    cp_complex = cp.complex64
+    cp_real = cp.float32
+    if precision == 64:
+        cp_complex = cp.complex128
+        cp_real = cp.float64
 
     if (lmin is None) or (lmax is None):
         lmin, lmax = get_bounds(H)
 
     H  = cp.sparse.csr_matrix(
         (
-            cp.array(H.data.astype("complex64")), 
+            cp.array(H.data.astype(cp_complex)),
             cp.array(H.indices),
             cp.array( H.indptr)
-        ), 
-        shape=H.shape, dtype="complex64"
+        ),
+        shape=H.shape, dtype=cp_complex
     )
 
     H, scale_fact_a, scale_fact_b = rescale_cupy(H, lmin, lmax, epsilon)
-    
-    moments = cp.array([
-        cupyops.get_moments(H, num_moments, dimension, precision=precision)
-        for i in range(num_vecs)
-    ])
+
+    moments = cp.zeros(num_moments, dtype=cp_complex)
+    for _ in range(num_vecs):
+        moment = cupyops.get_moments(H, num_moments, dimension, precision=precision)
+        moments = moments + moment.real
+
+    moments = moments/num_vecs/dimension
+
     kernel0 = cupy_jackson(num_moments, precision=precision)
- 
+
     ek, rho = cupyops.apply_kernel(
         moments,
         kernel0,
-        dimension,
         num_moments,
         num_vecs,
         extra_points

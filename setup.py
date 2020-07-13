@@ -62,7 +62,7 @@ def getRequirements():
         #else:
         tfRequirement = "tensorflow==1.15.3"
     
-    conditionalRequirements += [tfRequirement]
+        conditionalRequirements += [tfRequirement]
 
     return conditionalRequirements
 
@@ -74,7 +74,7 @@ with open("README.md", "r") as f:
 
 setup(
     name="emate",
-    version="v1.1.2",
+    version="v1.1.3",
     packages=find_packages(exclude=["build", ]),
     long_description=README_TEXT,
     long_description_content_type="text/markdown",
