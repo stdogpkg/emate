@@ -3,6 +3,27 @@
 eMaTe it is a python package which the main goal is to provide  methods capable of estimating the spectral densities and trace 
 functions of large sparse matrices. eMaTe can run in both CPU and GPU and can estimate the spectral density and related trace functions, such as entropy and Estrada index, even in directed or undirected networks with million of nodes.
 
+
+## CITE
+
+[Characterization and comparison of large directed graphs through the spectra of the magnetic Laplacian](https://arxiv.org/abs/2007.03466)
+
+```
+@article{FdeResende2020,
+  doi = {10.1063/5.0006891},
+  url = {https://doi.org/10.1063/5.0006891},
+  year = {2020},
+  month = jul,
+  publisher = {{AIP} Publishing},
+  volume = {30},
+  number = {7},
+  pages = {073141},
+  author = {Bruno Messias F. de Resende and Luciano da F. Costa},
+  title = {Characterization and comparison of large directed networks through the spectra of the magnetic Laplacian},
+  journal = {Chaos: An Interdisciplinary Journal of Nonlinear Science}
+}
+```
+
 ## Install                                                                                                              
 ```
 pip install emate
