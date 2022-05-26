@@ -1,6 +1,6 @@
 numpy
 scipy
-tensorflow-gpu==1.15.3
+tensorflow-gpu==2.7.2
 networkx
 sklearn
 matplotlib
